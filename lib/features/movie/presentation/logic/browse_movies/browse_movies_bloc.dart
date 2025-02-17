@@ -1,13 +1,26 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 
 part 'browse_movies_event.dart';
 part 'browse_movies_state.dart';
 
+final sample = [
+  MovieEntity.empty(),
+  MovieEntity.empty(),
+  MovieEntity.empty(),
+  MovieEntity.empty(),
+];
+
 class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
   BrowseMoviesBloc() : super(BrowseMoviesInitial()) {
-    on<BrowseMoviesEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<GetPopularMovies>(_onGetPopularMovies);
+  }
+
+  _onGetPopularMovies(GetPopularMovies event, Emitter<BrowseMoviesState> emit) {
+    emit(BrowseMoviesLoading());
+    Future.delayed(Durations.extralong4);
+    emit(BrowseMoviesLoaded(movies: sample));
   }
 }
