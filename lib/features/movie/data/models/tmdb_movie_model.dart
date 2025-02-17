@@ -2,6 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:movie_mite/core/utils/json_serializable/decimal.dart';
+import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 
 part 'tmdb_movie_model.g.dart';
 
@@ -71,4 +72,22 @@ final class TmdbMovieModel extends Equatable {
       _$TmdbMovieModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$TmdbMovieModelToJson(this);
+
+  MovieEntity toEntity() {
+    return MovieEntity(
+      isAdult: this.adult ?? false,
+      isCached: false,
+      isFavorite: false,
+      rating: voteAverage ?? Decimal.zero,
+      voteCount: voteCount ?? 0,
+      genres: [],
+      backdropPath: this.posterPath ?? '',
+      originalLanguage: this.originalLanguage ?? '',
+      originalTitle: this.originalTitle ?? '',
+      overview: this.overview ?? '',
+      posterPath: this.posterPath ?? '',
+      source: 'tmdb',
+      sourceId: '$id',
+    );
+  }
 }
