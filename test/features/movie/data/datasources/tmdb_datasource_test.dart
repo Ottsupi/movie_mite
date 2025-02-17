@@ -10,7 +10,7 @@ import 'package:movie_mite/features/movie/data/models/tmdb_movie_model.dart';
 
 class MockDio extends Mock implements Dio {}
 
-void main() async {
+void main() {
   late MockDio dio;
   late Map<String, dynamic> jsonResponse;
   late TmdbDatasource datasource;
