@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:movie_mite/core/network/api_client.dart';
 import 'package:movie_mite/features/movie/presentation/pages/browse_movies_page.dart';
 
 void main() {
+  setupDio();
   runApp(const MyApp());
 }
 
