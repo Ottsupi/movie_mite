@@ -60,6 +60,22 @@ final class MovieEntity extends Equatable {
   /// The source's identifier for the movie
   final String sourceId;
 
+  factory MovieEntity.empty() => MovieEntity(
+    isAdult: false,
+    isCached: false,
+    isFavorite: false,
+    rating: Decimal.fromInt(5),
+    voteCount: 100,
+    genres: ["Action", "Adventure"],
+    backdropPath: "",
+    originalLanguage: "en",
+    originalTitle: "Movie Title",
+    overview: "A brief overview of the movie.",
+    posterPath: "",
+    source: "",
+    sourceId: "",
+  );
+
   @override
   List<Object?> get props => [
     isAdult,
