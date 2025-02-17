@@ -7,4 +7,4 @@ sealed class BrowseMoviesEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class GetPopularMovies extends BrowseMoviesEvent {}
+final class FetchPopularMovies extends BrowseMoviesEvent {}
