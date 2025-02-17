@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_mite/core/constants/tmdb_api_urls.dart';
 import 'package:movie_mite/core/resources/exceptions.dart';
+import 'package:movie_mite/core/utils/logs/logger.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
 import 'package:movie_mite/features/movie/data/models/tmdb_movie_model.dart';
 
@@ -15,6 +16,7 @@ void main() async {
   late TmdbDatasource datasource;
 
   setUp(() {
+    setupLogger();
     dio = MockDio();
     GetIt.I.registerSingleton<Dio>(dio);
     datasource = TmdbDatasource();
