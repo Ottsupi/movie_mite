@@ -1,16 +1,19 @@
 # movie_mite
 
-A new Flutter project.
+A Movie browsing application in Flutter.
 
-## Getting Started
+* Bloc
+* Clean Architecture
 
-This project is a starting point for a Flutter application.
+General Guiding Principles
+* First make it work, then make it pretty
+* Make swapping or adding APIs easy
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Roadmap
+- [x] Display list of movies
+- [ ] Retrieve the list of movies from a `MovieListRepository` as a stream. 
+Because it's cool. Also this will presumably make it easier to store in a cache.
+- [ ] Display movie details and store favorite movies locally.
+- [ ] Cache browsed movie lists
+- [ ] Improve UI
+- [ ] Add favorites tagging feature (plan to watch, liked, disliked, etc)
