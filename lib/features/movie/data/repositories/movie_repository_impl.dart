@@ -18,4 +18,22 @@ final class MovieRepositoryImpl implements MovieRepository {
       return Left(ServerFailure(detail: e.detail));
     }
   }
+
+  @override
+  Future<Either<Failure, List<MovieEntity>>> getNextPage() {
+    // TODO: implement getNextPage
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<MovieEntity> movieListStream() {
+    // TODO: implement movieListStream
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<MovieListStatus> movieListStatus() {
+    // TODO: implement movieListStatus
+    throw UnimplementedError();
+  }
 }
