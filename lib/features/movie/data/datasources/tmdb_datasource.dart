@@ -6,16 +6,19 @@ import 'package:movie_mite/core/resources/exceptions.dart';
 import 'package:movie_mite/features/movie/data/models/tmdb_movie_model.dart';
 
 abstract class MovieRemoteDatasource {
-  Future<List<TmdbMovieModel>> getPopularMovies();
+  Future<List<TmdbMovieModel>> getPopularMovies(int page);
 }
 
 final class TmdbDatasource implements MovieRemoteDatasource {
   final Dio dio = GetIt.I.get<Dio>();
   final logger = GetIt.I.get<Logger>();
 
-  Future<List<TmdbMovieModel>> getPopularMovies() async {
+  Future<List<TmdbMovieModel>> getPopularMovies(int page) async {
     try {
-      final response = await dio.get(TmdbApiUrls.popularMovies);
+      final response = await dio.get(
+        TmdbApiUrls.popularMovies,
+        queryParameters: {'page': page},
+      );
       final results = response.data['results'] as List;
       return results.map((e) => TmdbMovieModel.fromJson(e)).toList();
     } on DioException catch (e) {
