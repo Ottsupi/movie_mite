@@ -90,4 +90,21 @@ final class TmdbMovieModel extends Equatable {
       sourceId: '$id',
     );
   }
+
+  factory TmdbMovieModel.empty() => TmdbMovieModel(
+    adult: false,
+    backdropPath: '',
+    genreIds: [],
+    id: 0,
+    originalLanguage: 'en',
+    originalTitle: 'Movie Title',
+    overview: 'A brief overview of the movie.',
+    popularity: Decimal.zero,
+    posterPath: '',
+    releaseDate: DateTime.now(),
+    title: 'Movie Title',
+    video: false,
+    voteAverage: Decimal.zero,
+    voteCount: 0,
+  );
 }
