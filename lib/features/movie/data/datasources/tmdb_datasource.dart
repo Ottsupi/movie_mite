@@ -5,7 +5,11 @@ import 'package:movie_mite/core/constants/tmdb_api_urls.dart';
 import 'package:movie_mite/core/resources/exceptions.dart';
 import 'package:movie_mite/features/movie/data/models/tmdb_movie_model.dart';
 
-final class TmdbDatasource {
+abstract class MovieRemoteDatasource {
+  Future<List<TmdbMovieModel>> getPopularMovies();
+}
+
+final class TmdbDatasource implements MovieRemoteDatasource {
   final Dio dio = GetIt.I.get<Dio>();
   final logger = GetIt.I.get<Logger>();
 
