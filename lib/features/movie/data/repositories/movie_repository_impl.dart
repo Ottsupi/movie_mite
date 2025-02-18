@@ -8,16 +8,16 @@ import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 import 'package:movie_mite/features/movie/domain/repositories/movie_repository.dart';
 
 final class MovieRepositoryImpl implements MovieRepository {
-  MovieRepositoryImpl(this._tmdbDatasource);
+  MovieRepositoryImpl(this._remoteMovieDatasource);
 
-  final TmdbDatasource _tmdbDatasource;
+  final MovieRemoteDatasource _remoteMovieDatasource;
   final _movieListStatusController = StreamController<MovieListStatus>();
   final _movieListStreamController = StreamController<List<MovieEntity>>();
 
   @override
   Future<Either<Failure, List<MovieEntity>>> getPopularMovies(int page) async {
     try {
-      final models = await _tmdbDatasource.getPopularMovies();
+      final models = await _remoteMovieDatasource.getPopularMovies();
       final entities = models.map((e) => e.toEntity()).toList();
       return Right(entities);
     } on ServerException catch (e) {
