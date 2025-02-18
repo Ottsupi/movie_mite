@@ -5,22 +5,23 @@ import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 /// The current status of the movie list stream.
 ///
 /// * [initial] on startup or when the movie list is cleared
-/// * [fetching] a network request is ongoing or retrieving from cache
-/// * [sending] there are movies in the queue to be sent to presentation layer
-/// * [waiting] nothing is being processed at the moment
+/// * [loading] a network request is ongoing or retrieving from cache
+/// * [networkLoaded] data loaded from network
+/// * [cacheLoaded] data loaded from cache
 /// * [error] a problem occured
-enum MovieListStatus { initial, fetching, sending, waiting, error }
+enum MovieListStatus { initial, loading, networkLoaded, cacheLoaded, error }
 
+/// Fetches [MovieEntity] from different places.
+///
+/// Although `get___Movies()` methods return a list of movies,
+/// blocs interested in that list must subscribe to `movieListStream()`
 abstract class MovieRepository {
   /// Get a list of popular movies
-  Future<Either<Failure, List<MovieEntity>>> getPopularMovies();
-
-  /// Get the next page of the current endpoint
-  Future<Either<Failure, List<MovieEntity>>> getNextPage();
-
-  /// Stream of [MovieEntity]
-  Stream<MovieEntity> movieListStream();
+  Future<Either<Failure, List<MovieEntity>>> getPopularMovies(int page);
 
   /// Stream of [MovieListStatus]
   Stream<MovieListStatus> movieListStatus();
+
+  /// Stream of a list of [MovieEntity]
+  Stream<List<MovieEntity>> movieListStream();
 }
