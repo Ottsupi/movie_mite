@@ -11,8 +11,18 @@ class BrowseMoviesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<MovieRepository>(
-      create: (context) => MovieRepositoryImpl(TmdbDatasource()),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<MovieRemoteDatasource>(
+          create: (context) => TmdbDatasource(),
+        ),
+        RepositoryProvider<MovieRepository>(
+          create:
+              (context) => MovieRepositoryImpl(
+                RepositoryProvider.of<MovieRemoteDatasource>(context),
+              ),
+        ),
+      ],
       child: BlocProvider(
         create:
             (context) => BrowseMoviesBloc(
