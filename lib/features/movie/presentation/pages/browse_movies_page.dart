@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
 import 'package:movie_mite/features/movie/data/repositories/movie_repository_impl.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
+import 'package:movie_mite/features/movie/domain/repositories/movie_repository.dart';
 import 'package:movie_mite/features/movie/presentation/logic/logic.dart';
 
 class BrowseMoviesPage extends StatelessWidget {
@@ -10,12 +11,12 @@ class BrowseMoviesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
+    return RepositoryProvider<MovieRepository>(
       create: (context) => MovieRepositoryImpl(TmdbDatasource()),
       child: BlocProvider(
         create:
             (context) => BrowseMoviesBloc(
-              RepositoryProvider.of<MovieRepositoryImpl>(context),
+              RepositoryProvider.of<MovieRepository>(context),
             )..add(FetchPopularMovies()),
         child: BrowseMoviesScreen(),
       ),
