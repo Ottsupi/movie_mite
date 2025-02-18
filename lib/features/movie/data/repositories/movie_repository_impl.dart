@@ -8,7 +8,9 @@ import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 import 'package:movie_mite/features/movie/domain/repositories/movie_repository.dart';
 
 final class MovieRepositoryImpl implements MovieRepository {
-  final _tmdbDatasource = TmdbDatasource();
+  MovieRepositoryImpl(this._tmdbDatasource);
+
+  final TmdbDatasource _tmdbDatasource;
   final _movieListStatusController = StreamController<MovieListStatus>();
   final _movieListStreamController = StreamController<List<MovieEntity>>();
 
