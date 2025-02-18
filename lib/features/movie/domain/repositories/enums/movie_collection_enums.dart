@@ -1,22 +1,20 @@
 /// Collection of movies
 enum MovieCollection {
-  popular,
+  favorite,
   nowShowing,
+  popular,
+  topRated,
   trending,
   upcoming,
-  latest,
-  topRated,
-  favorite,
 }
 
 extension MovieCollectionExt on MovieCollection {
   String get name => switch (this) {
-    MovieCollection.popular => 'Popular',
+    MovieCollection.favorite => 'Favorite',
     MovieCollection.nowShowing => 'Now Showing',
+    MovieCollection.popular => 'Popular',
+    MovieCollection.topRated => 'Top Rated',
     MovieCollection.trending => 'Trending',
     MovieCollection.upcoming => 'Upcoming',
-    MovieCollection.latest => 'Latest',
-    MovieCollection.topRated => 'Top Rated',
-    MovieCollection.favorite => 'Favorite',
   };
 }
