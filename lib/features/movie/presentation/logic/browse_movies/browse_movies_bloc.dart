@@ -19,7 +19,9 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
     Emitter<BrowseMoviesState> emit,
   ) async {
     emit(BrowseMoviesLoading());
-    final result = await GetPopularMovies(_movieRepository).call(null);
+    final result = await GetPopularMovies(
+      _movieRepository,
+    ).call(Params(page: 1));
     result.fold(
       (failure) => emit(BrowseMoviesFailed()),
       (movies) => emit(BrowseMoviesLoaded(movies: movies)),
