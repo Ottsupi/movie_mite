@@ -16,8 +16,20 @@ enum MovieListStatus { initial, loading, networkLoaded, cacheLoaded, error }
 /// Although `get___Movies()` methods return a list of movies,
 /// blocs interested in that list must subscribe to `movieListStream()`
 abstract class MovieRepository {
-  /// Get a list of popular movies
+  /// Get a list of movies sorted by popularity
   Future<Either<Failure, List<MovieEntity>>> getPopularMovies(int page);
+
+  /// Get a list of movies sorted by ratings
+  Future<Either<Failure, List<MovieEntity>>> getTopRatedMovies(int page);
+
+  /// Get a list of movies now showing in cinemas
+  Future<Either<Failure, List<MovieEntity>>> getNowShowingMovies(int page);
+
+  /// Get a list of movies with a title that matches the string
+  Future<Either<Failure, List<MovieEntity>>> searchMovieByTitle(
+    String title,
+    int page,
+  );
 
   /// Stream of [MovieListStatus]
   Stream<MovieListStatus> movieListStatus();
