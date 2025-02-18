@@ -9,7 +9,7 @@ final class MovieRepositoryImpl implements MovieRepository {
   final TmdbDatasource _tmdbDatasource = TmdbDatasource();
 
   @override
-  Future<Either<Failure, List<MovieEntity>>> getPopularMovies() async {
+  Future<Either<Failure, List<MovieEntity>>> getPopularMovies(int page) async {
     try {
       final models = await _tmdbDatasource.getPopularMovies();
       final entities = models.map((e) => e.toEntity()).toList();
@@ -20,20 +20,14 @@ final class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<MovieEntity>>> getNextPage() {
-    // TODO: implement getNextPage
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<MovieEntity> movieListStream() {
-    // TODO: implement movieListStream
-    throw UnimplementedError();
-  }
-
-  @override
   Stream<MovieListStatus> movieListStatus() {
     // TODO: implement movieListStatus
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<MovieEntity>> movieListStream() {
+    // TODO: implement movieListStream
     throw UnimplementedError();
   }
 }
