@@ -81,7 +81,7 @@ void main() {
           () => dio.get(TmdbApiUrls.popularMovies),
         ).thenAnswer((_) async => response);
 
-        final result = await datasource.getPopularMovies();
+        final result = await datasource.getPopularMovies(1);
         expect(result, isA<List<TmdbMovieModel>>());
         expect(result.length, 2);
       },
@@ -98,7 +98,7 @@ void main() {
         when(() => dio.get(TmdbApiUrls.popularMovies)).thenThrow(dioException);
 
         expectLater(
-          datasource.getPopularMovies(),
+          datasource.getPopularMovies(1),
           throwsA(isA<ServerException>()),
         );
       },

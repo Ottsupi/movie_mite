@@ -1,10 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_mite/core/resources/failures.dart';
-import 'package:movie_mite/core/utils/logs/logger.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
 import 'package:movie_mite/features/movie/data/models/tmdb_movie_model.dart';
 import 'package:movie_mite/features/movie/data/repositories/movie_repository_impl.dart';
@@ -35,7 +33,7 @@ void main() {
   group('getPopularMovies()', () {
     setUp(() {
       when(
-        () => remoteDatasource.getPopularMovies(),
+        () => remoteDatasource.getPopularMovies(1),
       ).thenAnswer((_) async => models);
     });
 
