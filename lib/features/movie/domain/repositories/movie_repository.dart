@@ -1,6 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:movie_mite/core/resources/failures.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
+import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collection_enums.dart';
+import 'package:movie_mite/features/movie/domain/repositories/enums/movie_list_status.dart';
 
 /// Fetches [MovieEntity] from different places.
 ///

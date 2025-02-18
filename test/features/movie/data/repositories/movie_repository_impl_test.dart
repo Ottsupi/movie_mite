@@ -7,7 +7,7 @@ import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart'
 import 'package:movie_mite/features/movie/data/models/tmdb_movie_model.dart';
 import 'package:movie_mite/features/movie/data/repositories/movie_repository_impl.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
-import 'package:movie_mite/features/movie/domain/repositories/movie_repository.dart';
+import 'package:movie_mite/features/movie/domain/repositories/enums/movie_list_status.dart';
 
 class MockRemoteDatasource extends Mock implements MovieRemoteDatasource {}
 
