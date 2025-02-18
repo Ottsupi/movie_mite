@@ -18,7 +18,7 @@ final class MovieRepositoryImpl implements MovieRepository {
   Future<Either<Failure, List<MovieEntity>>> getPopularMovies(int page) async {
     try {
       _movieListStatusController.add(MovieListStatus.loading);
-      final models = await _remoteMovieDatasource.getPopularMovies();
+      final models = await _remoteMovieDatasource.getPopularMovies(page);
       final entities = models.map((e) => e.toEntity()).toList();
       _movieListStreamController.add(entities);
       _movieListStatusController.add(MovieListStatus.networkLoaded);
