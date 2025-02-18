@@ -11,6 +11,7 @@ import 'package:movie_mite/features/movie/data/models/tmdb_movie_model.dart';
 class MockDio extends Mock implements Dio {}
 
 void main() {
+  group('getPopularMovies', () {
   late MockDio dio;
   late Map<String, dynamic> jsonResponse;
   late TmdbDatasource datasource;
@@ -66,8 +67,6 @@ void main() {
   tearDown(() {
     GetIt.I.reset();
   });
-
-  group('TmdbDatasource', () {
     test(
       'getPopularMovies should return a list of TmdbMovieModel from provided sample json',
       () async {
@@ -78,7 +77,8 @@ void main() {
         );
 
         when(
-          () => dio.get(TmdbApiUrls.popularMovies),
+          () =>
+              dio.get(TmdbApiUrls.popularMovies, queryParameters: {'page': 1}),
         ).thenAnswer((_) async => response);
 
         final result = await datasource.getPopularMovies(1);
