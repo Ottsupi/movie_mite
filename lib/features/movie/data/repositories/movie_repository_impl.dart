@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:fpdart/src/either.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:movie_mite/core/resources/exceptions.dart';
 import 'package:movie_mite/core/resources/failures.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
@@ -59,5 +59,11 @@ final class MovieRepositoryImpl implements MovieRepository {
   @override
   Stream<List<MovieEntity>> movieListStream() async* {
     yield* _movieListStreamController.stream;
+  }
+
+  @override
+  Future<void> dispose() async {
+    await _movieListStatusController.close();
+    await _movieListStreamController.close();
   }
 }

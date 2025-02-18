@@ -36,4 +36,7 @@ abstract class MovieRepository {
 
   /// Stream of a list of [MovieEntity]
   Stream<List<MovieEntity>> movieListStream();
+
+  /// Dispose of streams
+  Future<void> dispose();
 }
