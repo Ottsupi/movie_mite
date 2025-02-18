@@ -17,10 +17,14 @@ final class MovieRepositoryImpl implements MovieRepository {
   @override
   Future<Either<Failure, List<MovieEntity>>> getPopularMovies(int page) async {
     try {
+      _movieListStatusController.add(MovieListStatus.loading);
       final models = await _remoteMovieDatasource.getPopularMovies();
       final entities = models.map((e) => e.toEntity()).toList();
+      _movieListStreamController.add(entities);
+      _movieListStatusController.add(MovieListStatus.networkLoaded);
       return Right(entities);
     } on ServerException catch (e) {
+      _movieListStatusController.add(MovieListStatus.error);
       return Left(ServerFailure(detail: e.detail));
     }
   }
