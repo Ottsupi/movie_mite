@@ -30,14 +30,11 @@ final class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<MovieEntity>>> getNowShowingMovies(int page) {
-    // TODO: implement getNowShowingMovies
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, List<MovieEntity>>> getTopRatedMovies(int page) {
-    // TODO: implement getTopRatedMovies
+  Future<Either<Failure, List<MovieEntity>>> getMoviesByCollection(
+    MovieCollection collection,
+    int page,
+  ) {
+    // TODO: implement searchMovieByTitle
     throw UnimplementedError();
   }
 
