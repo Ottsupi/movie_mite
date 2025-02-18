@@ -6,3 +6,12 @@ sealed class MovieListEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+final class RecievedMovieList extends MovieListEvent {
+  const RecievedMovieList(this.movieList);
+
+  final List<MovieEntity> movieList;
+
+  @override
+  List<Object> get props => [movieList];
+}

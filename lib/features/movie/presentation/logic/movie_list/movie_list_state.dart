@@ -1,10 +1,16 @@
 part of 'movie_list_bloc.dart';
 
-sealed class MovieListState extends Equatable {
-  const MovieListState();
-  
-  @override
-  List<Object> get props => [];
-}
+final class MovieListState extends Equatable {
+  const MovieListState({required this.movies});
 
-final class MovieListInitial extends MovieListState {}
+  final List<MovieEntity> movies;
+
+  factory MovieListState.empty() => const MovieListState(movies: []);
+
+  @override
+  List<Object> get props => [movies];
+
+  MovieListState copyWith({List<MovieEntity>? movies}) {
+    return MovieListState(movies: movies ?? this.movies);
+  }
+}
