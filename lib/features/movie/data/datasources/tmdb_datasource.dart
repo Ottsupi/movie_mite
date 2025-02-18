@@ -8,6 +8,10 @@ import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collec
 
 abstract class MovieRemoteDatasource {
   Future<List<TmdbMovieModel>> getPopularMovies(int page);
+  Future<List<TmdbMovieModel>> getMoviesByCollection(
+    MovieCollection collection,
+    int page,
+  );
 }
 
 final class TmdbDatasource implements MovieRemoteDatasource {
@@ -31,6 +35,57 @@ final class TmdbDatasource implements MovieRemoteDatasource {
       logger.w("TmdbDatasource.getPopularMovies", error: e, stackTrace: s);
       throw ServerException(
         detail: "Something went wrong while fetching popular movies.",
+      );
+    }
+  }
+
+  @override
+  Future<List<TmdbMovieModel>> getMoviesByCollection(
+    MovieCollection collection,
+    int page,
+  ) async {
+    String collectionToUrl(MovieCollection collection) {
+      switch (collection) {
+        case MovieCollection.nowShowing:
+          return TmdbApiUrls.nowPlayingMovies;
+        case MovieCollection.popular:
+          return TmdbApiUrls.popularMovies;
+        case MovieCollection.trending:
+          return TmdbApiUrls.trendingMovies;
+        case MovieCollection.upcoming:
+          return TmdbApiUrls.upcomingMovies;
+        case MovieCollection.topRated:
+          return TmdbApiUrls.topRatedMovies;
+        case MovieCollection.favorite:
+          logger.e('Favorite collection requested from TmdbDatasource');
+          throw ServerException(
+            detail: "Your favorite movies are in the cache.",
+          );
+      }
+    }
+
+    try {
+      final response = await dio.get(
+        collectionToUrl(collection),
+        queryParameters: {'page': page},
+      );
+      final results = response.data['results'] as List;
+      return results.map((e) => TmdbMovieModel.fromJson(e)).toList();
+    } on DioException catch (e) {
+      logger.d(e.requestOptions.path);
+      throw ServerException(
+        error: e,
+        detail: e.message ?? "Could not fetch ${collection.name} movies",
+      );
+    } catch (e, s) {
+      logger.w(
+        "TmdbDatasource.getMoviesByCollection($collection, $page)",
+        error: e,
+        stackTrace: s,
+      );
+      throw ServerException(
+        detail:
+            "Something went wrong while fetching ${collection.name} movies.",
       );
     }
   }

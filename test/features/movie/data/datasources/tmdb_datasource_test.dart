@@ -1,20 +1,23 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_mite/core/constants/tmdb_api_urls.dart';
+import 'package:movie_mite/core/network/api_client.dart';
 import 'package:movie_mite/core/resources/exceptions.dart';
 import 'package:movie_mite/core/utils/logs/logger.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
 import 'package:movie_mite/features/movie/data/models/tmdb_movie_model.dart';
+import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collection_enums.dart';
 
 class MockDio extends Mock implements Dio {}
 
 void main() {
-  group('getPopularMovies', () {
   late MockDio dio;
   late Map<String, dynamic> jsonResponse;
   late TmdbDatasource datasource;
+  late Response response;
 
   setUp(() {
     setupLogger();
@@ -62,20 +65,20 @@ void main() {
       "total_pages": 48711,
       "total_results": 974212,
     };
+    response = Response(
+      data: jsonResponse,
+      statusCode: 200,
+      requestOptions: RequestOptions(path: TmdbApiUrls.popularMovies),
+    );
   });
 
   tearDown(() {
     GetIt.I.reset();
   });
+  group('getPopularMovies', () {
     test(
       'getPopularMovies should return a list of TmdbMovieModel from provided sample json',
       () async {
-        final response = Response(
-          data: jsonResponse,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: TmdbApiUrls.popularMovies),
-        );
-
         when(
           () =>
               dio.get(TmdbApiUrls.popularMovies, queryParameters: {'page': 1}),
@@ -99,6 +102,78 @@ void main() {
 
         expectLater(
           datasource.getPopularMovies(1),
+          throwsA(isA<ServerException>()),
+        );
+      },
+    );
+  });
+
+  group('getMoviesByCollection', () {
+    test('should hit the correct endpoint', () async {
+      final collection = MovieCollection.nowShowing;
+      final page = 1;
+
+      when(
+        () => dio.get(
+          TmdbApiUrls.nowPlayingMovies,
+          queryParameters: {'page': page},
+        ),
+      ).thenAnswer((_) async => response);
+      await datasource.getMoviesByCollection(collection, page);
+
+      verify(
+        () => dio.get(
+          TmdbApiUrls.nowPlayingMovies,
+          queryParameters: {'page': page},
+        ),
+      ).called(1);
+    });
+
+    test('should return a list of TmdbMovieModel', () async {
+      final collection = MovieCollection.popular;
+      final page = 2;
+
+      when(
+        () =>
+            dio.get(TmdbApiUrls.popularMovies, queryParameters: {'page': page}),
+      ).thenAnswer((_) async => response);
+
+      final result = await datasource.getMoviesByCollection(collection, page);
+      expect(result, isA<List<TmdbMovieModel>>());
+      expect(result.length, 2);
+    });
+
+    test(
+      'should throw ServerException when Dio throws a DioException',
+      () async {
+        final collection = MovieCollection.trending;
+        final page = 3;
+
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: TmdbApiUrls.trendingMovies),
+          type: DioExceptionType.unknown,
+        );
+        when(
+          () => dio.get(
+            TmdbApiUrls.popularMovies,
+            queryParameters: {'page': page},
+          ),
+        ).thenThrow(dioException);
+
+        expectLater(
+          datasource.getMoviesByCollection(collection, page),
+          throwsA(isA<ServerException>()),
+        );
+      },
+    );
+
+    test(
+      'should throw ServerException when favorite collection is requested',
+      () async {
+        final collection = MovieCollection.favorite;
+        final page = 3;
+        expectLater(
+          datasource.getMoviesByCollection(collection, page),
           throwsA(isA<ServerException>()),
         );
       },
