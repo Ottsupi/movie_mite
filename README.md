@@ -4,6 +4,7 @@ A Movie browsing application in Flutter.
 
 * Bloc
 * Clean Architecture
+* Functional Programming
 
 General Guiding Principles
 
@@ -44,3 +45,17 @@ General Guiding Principles
     Gemini about it and was left convinced: You're fetching new, independent
     chunks of data (pages) and appending them to the existing list. Each page
     is a distinct unit of data.
+* Barrel Files. I just let the IDE handle importing, but I do see the advantage
+  to lessen merge conflicts in larger teams. I'll get around to it at the end.
+* Error handling. I use try/catch blocks on network or cache requests. Beyond
+  data layer, I use `Either` from `fpdart`.
+* Architecture for fetching data
+  * Initially, I thought that making a bunch of methods for `get___Movies()` is
+    better than making a monster function handling everything. Further reading
+    about TheMovieDB api revealed that those endpoints are only for
+    convenience. Those are actually forms of `/discover` endpoint.
+  * Learning that, I decided to bunch them up in a `getMoviesByCollection()`
+    method.  
+  * Also, I'm going to try placing `favorites` in there too. I think it would be
+    super easy to implement a simple favorites feature that way. I'll just take
+    it out when it comes time to extend it.
