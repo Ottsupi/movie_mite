@@ -11,6 +11,17 @@ import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 /// * [error] a problem occured
 enum MovieListStatus { initial, loading, networkLoaded, cacheLoaded, error }
 
+/// Collection of movies
+enum MovieCollection {
+  popular,
+  nowShowing,
+  trending,
+  upcoming,
+  latest,
+  topRated,
+  favorite,
+}
+
 /// Fetches [MovieEntity] from different places.
 ///
 /// Although `get___Movies()` methods return a list of movies,
@@ -19,11 +30,11 @@ abstract class MovieRepository {
   /// Get a list of movies sorted by popularity
   Future<Either<Failure, List<MovieEntity>>> getPopularMovies(int page);
 
-  /// Get a list of movies sorted by ratings
-  Future<Either<Failure, List<MovieEntity>>> getTopRatedMovies(int page);
-
-  /// Get a list of movies now showing in cinemas
-  Future<Either<Failure, List<MovieEntity>>> getNowShowingMovies(int page);
+  /// Get a list of movies from a collection
+  Future<Either<Failure, List<MovieEntity>>> getMoviesByCollection(
+    MovieCollection collection,
+    int page,
+  );
 
   /// Get a list of movies with a title that matches the string
   Future<Either<Failure, List<MovieEntity>>> searchMovieByTitle(
