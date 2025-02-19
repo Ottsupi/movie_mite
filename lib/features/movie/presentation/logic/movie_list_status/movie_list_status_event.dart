@@ -7,12 +7,11 @@ sealed class MovieListStatusEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class ReceivedStatusInitial extends MovieListStatusEvent {}
+final class ReceivedStatus extends MovieListStatusEvent {
+  final MovieListStatus movieStatus;
 
-final class ReceivedStatusLoading extends MovieListStatusEvent {}
+  const ReceivedStatus(this.movieStatus);
 
-final class ReceivedStatusNetworkLoaded extends MovieListStatusEvent {}
-
-final class ReceivedStatusCacheLoaded extends MovieListStatusEvent {}
-
-final class ReceivedStatusError extends MovieListStatusEvent {}
+  @override
+  List<Object> get props => [movieStatus];
+}

@@ -17,64 +17,29 @@ class MovieListStatusBloc
 
   final logger = GetIt.instance.get<Logger>();
   MovieListStatusBloc(this._movieRepository) : super(MovieListStatusInitial()) {
-    on<ReceivedStatusInitial>(_onReceivedStatusInitial);
-    on<ReceivedStatusLoading>(_onReceivedStatusLoading);
-    on<ReceivedStatusNetworkLoaded>(_onReceivedStatusNetworkLoaded);
-    on<ReceivedStatusCacheLoaded>(_onReceivedStatusCacheLoaded);
-    on<ReceivedStatusError>(_onReceivedStatusError);
+    on<ReceivedStatus>(_onReceivedStatus);
 
     _movieListStatusSubscription = _movieRepository.movieListStatus().listen(
       onError: (error) => logger.e(error),
       (movieStatus) {
-        switch (movieStatus) {
-          case MovieListStatus.initial:
-            add(ReceivedStatusInitial());
-          case MovieListStatus.loading:
-            add(ReceivedStatusLoading());
-          case MovieListStatus.networkLoaded:
-            add(ReceivedStatusNetworkLoaded());
-          case MovieListStatus.cacheLoaded:
-            add(ReceivedStatusCacheLoaded());
-          case MovieListStatus.error:
-            add(ReceivedStatusError());
-        }
+        add(ReceivedStatus(movieStatus));
       },
     );
   }
 
-  _onReceivedStatusInitial(
-    ReceivedStatusInitial event,
-    Emitter<MovieListStatusState> emit,
-  ) {
-    emit(MovieListStatusInitial());
-  }
-
-  _onReceivedStatusLoading(
-    ReceivedStatusLoading event,
-    Emitter<MovieListStatusState> emit,
-  ) {
-    emit(MovieListStatusLoading());
-  }
-
-  _onReceivedStatusNetworkLoaded(
-    ReceivedStatusNetworkLoaded event,
-    Emitter<MovieListStatusState> emit,
-  ) {
-    emit(MovieListStatusNetworkLoaded());
-  }
-
-  _onReceivedStatusCacheLoaded(
-    ReceivedStatusCacheLoaded event,
-    Emitter<MovieListStatusState> emit,
-  ) {
-    emit(MovieListStatusCacheLoaded());
-  }
-
-  _onReceivedStatusError(
-    ReceivedStatusError event,
-    Emitter<MovieListStatusState> emit,
-  ) {
-    emit(MovieListStatusError());
+  _onReceivedStatus(ReceivedStatus event, Emitter<MovieListStatusState> emit) {
+    switch (event.movieStatus) {
+      case MovieListStatus.initial:
+        emit(MovieListStatusInitial());
+      case MovieListStatus.loading:
+        emit(MovieListStatusLoading());
+      case MovieListStatus.networkLoaded:
+        emit(MovieListStatusNetworkLoaded());
+      case MovieListStatus.cacheLoaded:
+        emit(MovieListStatusCacheLoaded());
+      case MovieListStatus.error:
+        emit(MovieListStatusError());
+    }
   }
 
   @override
