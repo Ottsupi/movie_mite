@@ -19,6 +19,7 @@ final class MovieRepositoryImpl implements MovieRepository {
   @override
   Future<Either<Failure, List<MovieEntity>>> getPopularMovies(int page) async {
     try {
+      if (page == 1) _movieListStatusController.add(MovieListStatus.initial);
       _movieListStatusController.add(MovieListStatus.loading);
       final models = await _remoteMovieDatasource.getPopularMovies(page);
       final entities = models.map((e) => e.toEntity()).toList();
@@ -51,7 +52,6 @@ final class MovieRepositoryImpl implements MovieRepository {
 
   @override
   Stream<MovieListStatus> movieListStatus() async* {
-    yield MovieListStatus.initial;
     yield* _movieListStatusController.stream;
   }
 
