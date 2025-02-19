@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
 import 'package:movie_mite/features/movie/data/repositories/movie_repository_impl.dart';
 import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collection_enums.dart';
@@ -9,6 +11,7 @@ import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_li
 import 'package:movie_mite/features/movie/presentation/logic/movie_list_status/movie_list_status_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/widgets/movie_list_builder.dart';
 import 'package:movie_mite/features/movie/presentation/widgets/movie_list_status_builder.dart';
+import 'package:rxdart/rxdart.dart';
 
 class BrowseMoviesPage extends StatelessWidget {
   const BrowseMoviesPage({super.key});
@@ -88,27 +91,32 @@ class BrowseMoviesScreenScrollView extends StatefulWidget {
 class _BrowseMoviesScreenScrollViewState
     extends State<BrowseMoviesScreenScrollView> {
   final _scrollController = ScrollController();
+  final _scrollSubject = PublishSubject<void>();
+  final logger = GetIt.I<Logger>();
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
-  }
 
-  void _onScroll() {
-    if (_isBottom) context.read<BrowseMoviesBloc>().add(FetchNextPage());
-  }
+    _scrollController.addListener(() {
+      _scrollSubject.add(null);
+    });
 
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
+    _scrollSubject.debounceTime(const Duration(milliseconds: 500)).listen((_) {
+      if (_scrollController.position.atEdge &&
+          _scrollController.position.pixels > 0) {
+        context.read<BrowseMoviesBloc>().add(FetchNextPage());
+      }
+    });
   }
 
   @override
   void dispose() {
+    _scrollController.removeListener(() {
+      _scrollSubject.add(null);
+    });
     _scrollController.dispose();
+    _scrollSubject.close();
     super.dispose();
   }
 
@@ -122,7 +130,6 @@ class _BrowseMoviesScreenScrollViewState
           leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
           title: Text("Browse Movies"),
         ),
-        MovieListStatusBuilder(),
         MovieListBuilder(),
       ],
     );
