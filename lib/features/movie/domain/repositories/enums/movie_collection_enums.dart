@@ -1,8 +1,8 @@
 /// Collection of movies
 enum MovieCollection {
   favorite,
-  nowShowing,
   popular,
+  nowShowing,
   topRated,
   trending,
   upcoming,
