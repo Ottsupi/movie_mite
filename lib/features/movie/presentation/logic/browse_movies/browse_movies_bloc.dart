@@ -15,7 +15,7 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
   final MovieRepository _movieRepository;
   final Logger logger = GetIt.I<Logger>();
 
-  static const int maxPages = 10;
+  static const int maxPages = 2;
   static const int itemsPerPage = 20;
 
   BrowseMoviesBloc(this._movieRepository) : super(BrowseMoviesState.initial()) {
