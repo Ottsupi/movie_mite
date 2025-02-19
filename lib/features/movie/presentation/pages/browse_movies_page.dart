@@ -71,21 +71,60 @@ class BrowseMoviesScreen extends StatelessWidget {
           BlocProvider.of<BrowseMoviesBloc>(context).add(RefreshMovies());
           return Future.delayed(Durations.long1);
         },
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              floating: true,
-              leading: IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.menu),
-              ),
-              title: Text("Browse Movies"),
-            ),
-            MovieListStatusBuilder(),
-            MovieListBuilder(),
-          ],
-        ),
+        child: BrowseMoviesScreenScrollView(),
       ),
+    );
+  }
+}
+
+class BrowseMoviesScreenScrollView extends StatefulWidget {
+  const BrowseMoviesScreenScrollView({super.key});
+
+  @override
+  State<BrowseMoviesScreenScrollView> createState() =>
+      _BrowseMoviesScreenScrollViewState();
+}
+
+class _BrowseMoviesScreenScrollViewState
+    extends State<BrowseMoviesScreenScrollView> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_isBottom) context.read<BrowseMoviesBloc>().add(FetchNextPage());
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      controller: _scrollController,
+      slivers: [
+        SliverAppBar(
+          floating: true,
+          leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+          title: Text("Browse Movies"),
+        ),
+        MovieListStatusBuilder(),
+        MovieListBuilder(),
+      ],
     );
   }
 }
