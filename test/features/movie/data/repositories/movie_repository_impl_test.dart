@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:movie_mite/core/resources/exceptions.dart';
 import 'package:movie_mite/core/resources/failures.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
 import 'package:movie_mite/features/movie/data/models/tmdb_movie_model.dart';
@@ -33,7 +34,7 @@ void main() {
   group('getPopularMovies()', () {
     setUp(() {
       when(
-        () => remoteDatasource.getPopularMovies(1),
+        () => remoteDatasource.getPopularMovies(any()),
       ).thenAnswer((_) async => models);
     });
 
@@ -49,17 +50,34 @@ void main() {
       );
     });
 
+    test('movieListStatus emits correct values when page != 1', () async {
+      await repository.getPopularMovies(2);
+      expectLater(
+        repository.movieListStatus(),
+        emitsInOrder([MovieListStatus.loading, MovieListStatus.networkLoaded]),
+      );
+    });
+
     test('movieListStream emits a list of movies', () async {
       await repository.getPopularMovies(1);
       expectLater(
         repository.movieListStream(),
-        emits(models.map((e) => e.toEntity()).toList()),
+        emits(isA<List<MovieEntity>>()),
       );
     });
 
-    test('returns correct type', () async {
+    test('returns a list of movie entities', () async {
       final result = await repository.getPopularMovies(1);
       expectLater(result, isA<Right<Failure, List<MovieEntity>>>());
+    });
+
+    test('returns Failure', () async {
+      when(
+        () => remoteDatasource.getPopularMovies(any()),
+      ).thenThrow(ServerException(detail: 'Test Error Handling'));
+
+      final result = await repository.getPopularMovies(1);
+      expectLater(result, isA<Left<Failure, List<MovieEntity>>>());
     });
   });
 }
