@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:fpdart/fpdart.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:movie_mite/core/resources/exceptions.dart';
 import 'package:movie_mite/core/resources/failures.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
@@ -13,8 +15,12 @@ final class MovieRepositoryImpl implements MovieRepository {
   MovieRepositoryImpl(this._remoteMovieDatasource);
 
   final MovieRemoteDatasource _remoteMovieDatasource;
-  final _movieListStatusController = StreamController<MovieListStatus>();
-  final _movieListStreamController = StreamController<List<MovieEntity>>();
+  final _movieListStatusController =
+      StreamController<MovieListStatus>.broadcast();
+  final _movieListStreamController =
+      StreamController<List<MovieEntity>>.broadcast();
+
+  final logger = GetIt.instance.get<Logger>();
 
   @override
   Future<Either<Failure, List<MovieEntity>>> getPopularMovies(int page) async {
@@ -64,13 +70,13 @@ final class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Stream<MovieListStatus> movieListStatus() async* {
-    yield* _movieListStatusController.stream;
+  Stream<MovieListStatus> movieListStatus() {
+    return _movieListStatusController.stream;
   }
 
   @override
-  Stream<List<MovieEntity>> movieListStream() async* {
-    yield* _movieListStreamController.stream;
+  Stream<List<MovieEntity>> movieListStream() {
+    return _movieListStreamController.stream;
   }
 
   @override
