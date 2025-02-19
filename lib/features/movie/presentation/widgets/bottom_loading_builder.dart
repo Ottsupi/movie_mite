@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/browse_movies/browse_movies_bloc.dart';
+import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collection_enums.dart';
 
 class BottomLoadingBuilder extends StatelessWidget {
   const BottomLoadingBuilder({super.key});
@@ -18,9 +19,9 @@ class BottomLoadingBuilder extends StatelessWidget {
               return Column(
                 children: [
                   Text(
-                    "Top $maxResults ${state.collection.name} movies displayed.",
+                    "Top $maxResults ${state.collection.name} movies displayed",
                   ),
-                  Text(" Please try a different collection."),
+                  Text(" Please try a different collection"),
                 ],
               );
             }
