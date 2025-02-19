@@ -14,8 +14,7 @@ General Guiding Principles
 ## Roadmap
 
 * [x] Display list of movies
-
-* [ ] Retrieve the list of movies from a `MovieListRepository` as a stream.
+* [x] Retrieve the list of movies from a `MovieRepository` as a stream.
       Because it's cool. Also this will presumably make it easier to store in
       a cache.
 * [ ] Display movie details and store favorite movies locally.
@@ -59,3 +58,9 @@ General Guiding Principles
   * Also, I'm going to try placing `favorites` in there too. I think it would be
     super easy to implement a simple favorites feature that way. I'll just take
     it out when it comes time to extend it.
+
+## Learnings
+
+* Dart streams can only be listened to once. Make it a `broadcast()` to allow
+  multiple listeners.
+* Freezed package for `copyWith()` generation.
