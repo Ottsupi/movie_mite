@@ -36,7 +36,6 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
     FetchMoviesByCollection event,
     Emitter<BrowseMoviesState> emit,
   ) async {
-    logger.d('Fetching movies collection: ${event.collection}');
     final params = GetMoviesByCollectionParams(
       collection: event.collection,
       page: event.page,
