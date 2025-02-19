@@ -23,14 +23,63 @@ class MoviesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList.builder(
-      itemCount: movies.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(movies[index].originalTitle),
-          subtitle: Text(movies[index].overview),
-        );
-      },
+    return SliverPadding(
+      padding: EdgeInsets.all(8),
+      sliver: SliverGrid.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 2 / 3,
+          mainAxisSpacing: 8.0,
+          crossAxisSpacing: 8.0,
+        ),
+        itemCount: movies.length,
+        itemBuilder: (context, index) {
+          return MovieCard(movies[index]);
+        },
+      ),
+    );
+  }
+}
+
+class MovieCard extends StatelessWidget {
+  const MovieCard(this.movie, {super.key});
+
+  final MovieEntity movie;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black87,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          Center(
+            child: Image.network(
+              'https://image.tmdb.org/t/p/w342${movie.posterPath}',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Container(
+            height: 100,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.black87, Colors.transparent],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              movie.originalTitle,
+              style: const TextStyle(color: Colors.white),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
