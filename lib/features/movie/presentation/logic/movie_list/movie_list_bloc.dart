@@ -19,11 +19,11 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
   final logger = GetIt.instance.get<Logger>();
 
   MovieListBloc(this._movieRepository) : super(MovieListState.empty()) {
-    on<RecievedMovieList>(_onRecievedMovieList);
+    on<ReceivedMovieList>(_onRecievedMovieList);
     on<ReceivedMovieListStatus>(_onReceivedMovieListStatus);
 
     _movieListStreamSubscription = _movieRepository.movieListStream().listen(
-      (movieList) => add(RecievedMovieList(movieList)),
+      (movieList) => add(ReceivedMovieList(movieList)),
       onError: (error) => logger.e(error),
     );
     _movieListStatusSubscription = _movieRepository.movieListStatus().listen(
@@ -32,7 +32,7 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
     );
   }
 
-  _onRecievedMovieList(RecievedMovieList event, Emitter<MovieListState> emit) {
+  _onRecievedMovieList(ReceivedMovieList event, Emitter<MovieListState> emit) {
     emit(state.copyWith(movies: state.movies + event.movieList));
   }
 

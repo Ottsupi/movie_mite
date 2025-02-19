@@ -7,8 +7,8 @@ sealed class MovieListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class RecievedMovieList extends MovieListEvent {
-  const RecievedMovieList(this.movieList);
+final class ReceivedMovieList extends MovieListEvent {
+  const ReceivedMovieList(this.movieList);
 
   final List<MovieEntity> movieList;
 
