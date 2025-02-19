@@ -10,6 +10,7 @@ import 'package:movie_mite/features/movie/presentation/logic/logic.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list_status/movie_list_status_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/widgets/bottom_loading_builder.dart';
+import 'package:movie_mite/features/movie/presentation/widgets/movie_collections_picker.dart';
 import 'package:movie_mite/features/movie/presentation/widgets/movie_list_builder.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -130,6 +131,7 @@ class _BrowseMoviesScreenScrollViewState
           leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
           title: Text("Browse Movies"),
         ),
+        MovieCollectionsPicker(),
         MovieListBuilder(),
         BottomLoadingBuilder(),
       ],
