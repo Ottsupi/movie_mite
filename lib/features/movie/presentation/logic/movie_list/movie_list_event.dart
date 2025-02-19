@@ -15,3 +15,12 @@ final class RecievedMovieList extends MovieListEvent {
   @override
   List<Object> get props => [movieList];
 }
+
+final class ReceivedMovieListStatus extends MovieListEvent {
+  final MovieListStatus status;
+
+  ReceivedMovieListStatus(this.status);
+
+  @override
+  List<Object> get props => [status];
+}
