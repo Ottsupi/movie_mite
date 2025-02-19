@@ -20,6 +20,8 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
     Emitter<BrowseMoviesState> emit,
   ) async {
     emit(BrowseMoviesState(page: 1, collection: MovieCollection.popular));
-    await GetPopularMovies(_movieRepository).call(Params(page: 1));
+    await GetPopularMovies(
+      _movieRepository,
+    ).call(GetPopularMoviesParams(page: 1));
   }
 }

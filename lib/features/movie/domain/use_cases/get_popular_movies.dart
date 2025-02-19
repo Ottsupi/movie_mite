@@ -5,21 +5,24 @@ import 'package:movie_mite/core/usecases/usecase.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 import 'package:movie_mite/features/movie/domain/repositories/movie_repository.dart';
 
-class GetPopularMovies implements UseCase<List<MovieEntity>, Params> {
+class GetPopularMovies
+    implements UseCase<List<MovieEntity>, GetPopularMoviesParams> {
   final MovieRepository _repository;
 
   GetPopularMovies(this._repository);
 
   @override
-  Future<Either<Failure, List<MovieEntity>>> call(Params params) async {
+  Future<Either<Failure, List<MovieEntity>>> call(
+    GetPopularMoviesParams params,
+  ) async {
     return await _repository.getPopularMovies(params.page);
   }
 }
 
-class Params extends Equatable {
+class GetPopularMoviesParams extends Equatable {
   final int page;
 
-  Params({required this.page});
+  GetPopularMoviesParams({required this.page});
 
   @override
   List<Object?> get props => [page];
