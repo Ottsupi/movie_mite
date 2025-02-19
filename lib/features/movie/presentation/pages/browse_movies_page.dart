@@ -67,6 +67,7 @@ class BrowseMoviesScreen extends StatelessWidget {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () {
+          BlocProvider.of<BrowseMoviesBloc>(context).add(RefreshMovies());
           return Future.delayed(Durations.long1);
         },
         child: CustomScrollView(

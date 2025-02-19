@@ -19,6 +19,7 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
     on<FetchPopularMovies>(_onGetPopularMovies);
     on<FetchMoviesByCollection>(_onFetchMoviesByCollection);
     on<FetchNextPage>(_onFetchNextPage);
+    on<RefreshMovies>(_onRefreshMovies);
   }
 
   _onGetPopularMovies(
@@ -64,5 +65,9 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
         collection: state.collection,
       ),
     );
+  }
+
+  _onRefreshMovies(RefreshMovies event, Emitter<BrowseMoviesState> emit) async {
+    add(FetchMoviesByCollection(page: 1, collection: state.collection));
   }
 }
