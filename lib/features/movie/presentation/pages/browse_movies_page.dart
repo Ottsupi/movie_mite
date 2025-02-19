@@ -7,6 +7,7 @@ import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collec
 import 'package:movie_mite/features/movie/domain/repositories/movie_repository.dart';
 import 'package:movie_mite/features/movie/presentation/logic/logic.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
+import 'package:movie_mite/features/movie/presentation/logic/movie_list_status/movie_list_status_bloc.dart';
 
 class BrowseMoviesPage extends StatelessWidget {
   const BrowseMoviesPage({super.key});
@@ -40,6 +41,12 @@ class BrowseMoviesPage extends StatelessWidget {
                   RepositoryProvider.of<MovieRepository>(context),
                 )..add(FetchMoviesByCollection(MovieCollection.popular)),
           ),
+          BlocProvider(
+            create:
+                (context) => MovieListStatusBloc(
+                  RepositoryProvider.of<MovieRepository>(context),
+                ),
+          ),
         ],
         child: BrowseMoviesScreen(),
       ),
@@ -68,9 +75,58 @@ class BrowseMoviesScreen extends StatelessWidget {
               title: Text("Browse Movies"),
             ),
             // Category(),
+            MovieListStatusBuilder(),
             MovieListBuilder(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MovieListStatusBuilder extends StatelessWidget {
+  const MovieListStatusBuilder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: BlocBuilder<MovieListStatusBloc, MovieListStatusState>(
+        builder: (context, state) {
+          switch (state) {
+            case MovieListStatusInitial():
+            case MovieListStatusLoading():
+              return Container(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              );
+            case MovieListStatusNetworkLoaded():
+              return SizedBox.shrink();
+            case MovieListStatusCacheLoaded():
+              return Container(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      'Data loaded from cache and may not be up to date.',
+                    ),
+                  ),
+                ),
+              );
+            case MovieListStatusError():
+              return Container(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text('Something went wrong.'),
+                  ),
+                ),
+              );
+          }
+        },
       ),
     );
   }
