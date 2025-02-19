@@ -8,6 +8,7 @@ import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart'
 import 'package:movie_mite/features/movie/data/models/tmdb_movie_model.dart';
 import 'package:movie_mite/features/movie/data/repositories/movie_repository_impl.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
+import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collection_enums.dart';
 import 'package:movie_mite/features/movie/domain/repositories/enums/movie_list_status.dart';
 
 class MockRemoteDatasource extends Mock implements MovieRemoteDatasource {}
@@ -77,6 +78,68 @@ void main() {
       ).thenThrow(ServerException(detail: 'Test Error Handling'));
 
       final result = await repository.getPopularMovies(1);
+      expectLater(result, isA<Left<Failure, List<MovieEntity>>>());
+    });
+  });
+
+  group('getMoviesByCollection()', () {
+    setUp(() {
+      when(
+        () => remoteDatasource.getMoviesByCollection(
+          MovieCollection.popular,
+          any(),
+        ),
+      ).thenAnswer((_) async => models);
+    });
+
+    test('movieListStatus emits correct values in order', () async {
+      await repository.getMoviesByCollection(MovieCollection.popular, 1);
+      expectLater(
+        repository.movieListStatus(),
+        emitsInOrder([
+          MovieListStatus.initial,
+          MovieListStatus.loading,
+          MovieListStatus.networkLoaded,
+        ]),
+      );
+    });
+
+    test('movieListStatus emits correct values when page != 1', () async {
+      await repository.getMoviesByCollection(MovieCollection.popular, 2);
+      expectLater(
+        repository.movieListStatus(),
+        emitsInOrder([MovieListStatus.loading, MovieListStatus.networkLoaded]),
+      );
+    });
+
+    test('movieListStream emits a list of movies', () async {
+      await repository.getMoviesByCollection(MovieCollection.popular, 1);
+      expectLater(
+        repository.movieListStream(),
+        emits(isA<List<MovieEntity>>()),
+      );
+    });
+
+    test('returns a list of movie entities', () async {
+      final result = await repository.getMoviesByCollection(
+        MovieCollection.popular,
+        1,
+      );
+      expectLater(result, isA<Right<Failure, List<MovieEntity>>>());
+    });
+
+    test('returns Failure', () async {
+      when(
+        () => remoteDatasource.getMoviesByCollection(
+          MovieCollection.popular,
+          any(),
+        ),
+      ).thenThrow(ServerException(detail: 'Test Error Handling'));
+
+      final result = await repository.getMoviesByCollection(
+        MovieCollection.popular,
+        1,
+      );
       expectLater(result, isA<Left<Failure, List<MovieEntity>>>());
     });
   });
