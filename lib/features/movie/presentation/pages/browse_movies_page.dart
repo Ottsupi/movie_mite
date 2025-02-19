@@ -9,8 +9,8 @@ import 'package:movie_mite/features/movie/domain/repositories/movie_repository.d
 import 'package:movie_mite/features/movie/presentation/logic/logic.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list_status/movie_list_status_bloc.dart';
+import 'package:movie_mite/features/movie/presentation/widgets/bottom_loading_builder.dart';
 import 'package:movie_mite/features/movie/presentation/widgets/movie_list_builder.dart';
-import 'package:movie_mite/features/movie/presentation/widgets/movie_list_status_builder.dart';
 import 'package:rxdart/rxdart.dart';
 
 class BrowseMoviesPage extends StatelessWidget {
@@ -131,6 +131,7 @@ class _BrowseMoviesScreenScrollViewState
           title: Text("Browse Movies"),
         ),
         MovieListBuilder(),
+        BottomLoadingBuilder(),
       ],
     );
   }
