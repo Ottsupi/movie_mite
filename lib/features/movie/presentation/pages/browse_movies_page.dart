@@ -81,34 +81,10 @@ class BrowseMoviesScreen extends StatelessWidget {
               ),
               title: Text("Browse Movies"),
             ),
-            // Category(),
             MovieListStatusBuilder(),
             MovieListBuilder(),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class Category extends StatelessWidget {
-  const Category({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = [
-      Colors.red,
-      Colors.green,
-      Colors.blue,
-      Colors.yellow,
-      Colors.orange,
-      Colors.purple,
-    ];
-    return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          for (var color in colors) Container(height: 200, color: color),
-        ],
       ),
     );
   }
