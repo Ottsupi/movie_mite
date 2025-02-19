@@ -28,13 +28,13 @@ class BrowseMoviesPage extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(
+          BlocProvider<MovieListBloc>(
             create:
                 (context) => MovieListBloc(
                   RepositoryProvider.of<MovieRepository>(context),
                 ),
           ),
-          BlocProvider(
+          BlocProvider<BrowseMoviesBloc>(
             lazy: false,
             create:
                 (context) => BrowseMoviesBloc(
@@ -46,7 +46,7 @@ class BrowseMoviesPage extends StatelessWidget {
                   ),
                 ),
           ),
-          BlocProvider(
+          BlocProvider<MovieListStatusBloc>(
             create:
                 (context) => MovieListStatusBloc(
                   RepositoryProvider.of<MovieRepository>(context),
