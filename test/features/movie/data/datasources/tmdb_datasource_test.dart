@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_mite/core/constants/tmdb_api_urls.dart';
-import 'package:movie_mite/core/network/api_client.dart';
 import 'package:movie_mite/core/resources/exceptions.dart';
 import 'package:movie_mite/core/utils/logs/logger.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
