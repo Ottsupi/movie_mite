@@ -10,12 +10,15 @@ sealed class BrowseMoviesEvent extends Equatable {
 final class FetchPopularMovies extends BrowseMoviesEvent {}
 
 final class FetchMoviesByCollection extends BrowseMoviesEvent {
+  final int page;
   final MovieCollection collection;
 
-  const FetchMoviesByCollection(this.collection);
+  const FetchMoviesByCollection({required this.page, required this.collection});
 
   @override
-  List<Object> get props => [collection];
+  List<Object> get props => [page, collection];
 }
 
 final class FetchNextPage extends BrowseMoviesEvent {}
+
+final class RefreshMovies extends BrowseMoviesEvent {}

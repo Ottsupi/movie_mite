@@ -39,7 +39,12 @@ class BrowseMoviesPage extends StatelessWidget {
             create:
                 (context) => BrowseMoviesBloc(
                   RepositoryProvider.of<MovieRepository>(context),
-                )..add(FetchMoviesByCollection(MovieCollection.popular)),
+                )..add(
+                  FetchMoviesByCollection(
+                    page: 1,
+                    collection: MovieCollection.popular,
+                  ),
+                ),
           ),
           BlocProvider(
             create:

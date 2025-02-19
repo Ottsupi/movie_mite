@@ -38,27 +38,7 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
     logger.d('Fetching movies collection: ${event.collection}');
     final params = GetMoviesByCollectionParams(
       collection: event.collection,
-      page: 1,
-    );
-    final result = await GetMoviesByCollection(_movieRepository).call(params);
-    result.fold(
-      (failure) {
-        emit(state.copyWith(failure: failure));
-      },
-      (movies) {
-        emit(
-          state.copyWith(page: 1, collection: event.collection, failure: null),
-        );
-      },
-    );
-  }
-
-  _onFetchNextPage(FetchNextPage event, Emitter<BrowseMoviesState> emit) async {
-    emit(BrowseMoviesState(page: 1, collection: state.collection));
-    final newPage = state.page + 1;
-    final params = GetMoviesByCollectionParams(
-      collection: state.collection,
-      page: newPage,
+      page: event.page,
     );
     final result = await GetMoviesByCollection(_movieRepository).call(params);
     result.fold(
@@ -68,12 +48,21 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
       (movies) {
         emit(
           state.copyWith(
-            page: newPage,
-            collection: state.collection,
+            page: event.page,
+            collection: event.collection,
             failure: null,
           ),
         );
       },
+    );
+  }
+
+  _onFetchNextPage(FetchNextPage event, Emitter<BrowseMoviesState> emit) async {
+    add(
+      FetchMoviesByCollection(
+        page: state.page + 1,
+        collection: state.collection,
+      ),
     );
   }
 }
