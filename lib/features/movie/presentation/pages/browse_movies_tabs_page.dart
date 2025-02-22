@@ -34,10 +34,12 @@ class BrowseMoviesTabsScreen extends StatelessWidget {
       length: MovieCollection.values.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Browse Movies'),
+          title: Text('Movie Mite'),
           bottom: TabBar(
             isScrollable: true,
             tabs: [
+              Tab(icon: Icon(Icons.favorite)),
+              Tab(icon: Icon(Icons.search)),
               for (MovieCollection collection in MovieCollection.values)
                 Tab(text: collection.name),
             ],
@@ -56,6 +58,20 @@ class BrowseCollectionTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return TabBarView(
       children: [
+        CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              child: Container(child: Center(child: Text('Favorites'))),
+            ),
+          ],
+        ),
+        CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              child: Container(child: Center(child: Text('Search'))),
+            ),
+          ],
+        ),
         for (MovieCollection collection in MovieCollection.values)
           BrowseCollectionTab(collection: collection),
       ],
