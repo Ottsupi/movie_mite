@@ -9,6 +9,7 @@ import 'package:movie_mite/features/movie/domain/repositories/movie_repository.d
 import 'package:movie_mite/features/movie/presentation/logic/browse_movies/browse_movies_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list_status/movie_list_status_bloc.dart';
+import 'package:movie_mite/features/movie/presentation/pages/favorite_movies_tab_view.dart';
 import 'package:movie_mite/features/movie/presentation/widgets/movie_list_builder.dart';
 import 'package:movie_mite/features/movie/presentation/widgets/movie_list_status_builder.dart';
 import 'package:rxdart/rxdart.dart';
@@ -31,7 +32,7 @@ class BrowseMoviesTabsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: MovieCollection.values.length,
+      length: 2 + MovieCollection.values.length,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Movie Mite'),
@@ -58,13 +59,7 @@ class BrowseCollectionTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return TabBarView(
       children: [
-        CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              child: Container(child: Center(child: Text('Favorites'))),
-            ),
-          ],
-        ),
+        FavoriteMoviesTabView(),
         CustomScrollView(
           slivers: [
             SliverFillRemaining(
