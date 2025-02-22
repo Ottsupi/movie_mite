@@ -13,14 +13,8 @@ General Guiding Principles
 
 ## Roadmap
 
-* [x] Display list of movies
-* [x] Retrieve the list of movies from a `MovieRepository` as a stream.
-      Because it's cool. Also this will presumably make it easier to store in
-      a cache.
-* [ ] Display movie details and store favorite movies locally.
-* [ ] Cache browsed movie lists
-* [ ] Improve UI
-* [ ] Add favorites tagging feature (plan to watch, liked, disliked, etc)
+* Days 1-3: fiddled with architecture around the api
+* Day 4: Implemented local storage of favorite movies
 
 ## Developer Notes
 
@@ -58,6 +52,17 @@ General Guiding Principles
   * Also, I'm going to try placing `favorites` in there too. I think it would be
     super easy to implement a simple favorites feature that way. I'll just take
     it out when it comes time to extend it.
+* Choosing the local storage solution was more arduous than expected. As of
+  Feb 2025:
+  * Hive - Not maintained and documentation is down
+  * Isar - Not maintained
+  * Objectbox - Dependency issue with `objectbox_generator` not using null-safe
+    dart
+  * Drift - Seems promising so I decided to learn it
+* Another issue encountered though is that I can't make tests for Drift. I'm
+  having problems with the local installation of sqlite. Tried to do integration
+  tests instead but no dice. Did it blind and it worked first try so that speaks
+  for its reliability and user experience.
 
 ## Learnings
 
