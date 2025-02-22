@@ -7,6 +7,13 @@ sealed class FavoriteMoviesEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class FetchFavoriteMovies extends FavoriteMoviesEvent {
-  const FetchFavoriteMovies();
+final class FetchFavoriteMovies extends FavoriteMoviesEvent {}
+
+final class AddFavoriteMovieEvent extends FavoriteMoviesEvent {
+  final MovieEntity movie;
+
+  const AddFavoriteMovieEvent(this.movie);
+
+  @override
+  List<Object> get props => [movie];
 }
