@@ -7,4 +7,9 @@ class ServerException implements Exception {
   ServerException({required this.detail, this.error});
 }
 
-class CacheException implements Exception {}
+class CacheException implements Exception {
+  final String detail;
+  final Exception? error;
+
+  CacheException({required this.detail, this.error});
+}
