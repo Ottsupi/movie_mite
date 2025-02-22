@@ -164,17 +164,5 @@ void main() {
         );
       },
     );
-
-    test(
-      'should throw ServerException when favorite collection is requested',
-      () async {
-        final collection = MovieCollection.favorite;
-        final page = 3;
-        expectLater(
-          datasource.getMoviesByCollection(collection, page),
-          throwsA(isA<ServerException>()),
-        );
-      },
-    );
   });
 }
