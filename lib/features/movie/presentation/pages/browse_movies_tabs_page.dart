@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:movie_mite/features/movie/data/datasources/favorite_datasource.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
+import 'package:movie_mite/features/movie/data/repositories/favorite_repository_impl.dart';
 import 'package:movie_mite/features/movie/data/repositories/movie_repository_impl.dart';
 import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collection_enums.dart';
+import 'package:movie_mite/features/movie/domain/repositories/favorite_repository.dart';
 import 'package:movie_mite/features/movie/domain/repositories/movie_repository.dart';
 import 'package:movie_mite/features/movie/presentation/logic/browse_movies/browse_movies_bloc.dart';
+import 'package:movie_mite/features/movie/presentation/logic/favorite_movies/favorite_movies_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list_status/movie_list_status_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/pages/favorite_movies_tab_view.dart';
@@ -19,9 +23,28 @@ class BrowseMoviesTabsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<MovieRemoteDatasource>(
-      create: (context) => TmdbDatasource(),
-      child: BrowseMoviesTabsScreen(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<MovieRemoteDatasource>(
+          create: (context) => TmdbDatasource(),
+        ),
+        RepositoryProvider<FavoriteDatasource>(
+          create: (context) => FavoriteDatasourceImpl(),
+        ),
+        RepositoryProvider<FavoriteRepository>(
+          create:
+              (context) => FavoriteRepositoryImpl(
+                RepositoryProvider.of<FavoriteDatasource>(context),
+              ),
+        ),
+      ],
+      child: BlocProvider(
+        create:
+            (context) => FavoriteMoviesBloc(
+              RepositoryProvider.of<FavoriteRepository>(context),
+            ),
+        child: BrowseMoviesTabsScreen(),
+      ),
     );
   }
 }
