@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
+import 'package:movie_mite/features/movie/presentation/logic/favorite_movies/favorite_movies_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
 
 class MovieListBuilder extends StatelessWidget {
@@ -34,7 +35,13 @@ class MoviesList extends StatelessWidget {
         ),
         itemCount: movies.length,
         itemBuilder: (context, index) {
-          return MovieCard(movies[index]);
+          return MovieCard(
+            movies[index],
+            onDoubleTap:
+                () => BlocProvider.of<FavoriteMoviesBloc>(
+                  context,
+                ).add(AddFavoriteMovieEvent(movies[index])),
+          );
         },
       ),
     );
@@ -42,43 +49,47 @@ class MoviesList extends StatelessWidget {
 }
 
 class MovieCard extends StatelessWidget {
-  const MovieCard(this.movie, {super.key});
+  const MovieCard(this.movie, {super.key, this.onDoubleTap});
 
   final MovieEntity movie;
+  final void Function()? onDoubleTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black87,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Center(
-            child: Image.network(
-              'https://image.tmdb.org/t/p/w342${movie.posterPath}',
-              fit: BoxFit.cover,
-            ),
-          ),
-          Container(
-            height: 100,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.black87, Colors.transparent],
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
+    return GestureDetector(
+      onDoubleTap: onDoubleTap,
+      child: Container(
+        color: Colors.black87,
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            Center(
+              child: Image.network(
+                'https://image.tmdb.org/t/p/w342${movie.posterPath}',
+                fit: BoxFit.cover,
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              movie.originalTitle,
-              style: const TextStyle(color: Colors.white),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            Container(
+              height: 100,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.black87, Colors.transparent],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                movie.originalTitle,
+                style: const TextStyle(color: Colors.white),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
