@@ -15,10 +15,10 @@ abstract class FavoriteDatasource {
   Future<void> removeFavoriteMovieById(int id);
 
   /// Get by source id
-  Future<DriftMovieModel?> getFavoriteMovieBySourceId(
-    String sourceId,
-    String source,
-  );
+  Future<DriftMovieModel?> getFavoriteMovieBySourceId({
+    required String sourceId,
+    required String source,
+  });
 }
 
 final class FavoriteDatasourceImpl implements FavoriteDatasource {
@@ -54,10 +54,10 @@ final class FavoriteDatasourceImpl implements FavoriteDatasource {
   }
 
   @override
-  Future<DriftMovieModel?> getFavoriteMovieBySourceId(
-    String sourceId,
-    String source,
-  ) async {
+  Future<DriftMovieModel?> getFavoriteMovieBySourceId({
+    required String sourceId,
+    required String source,
+  }) async {
     try {
       final result =
           await (db.select(db.driftMovieTable)..where(
