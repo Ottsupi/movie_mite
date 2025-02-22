@@ -56,11 +56,6 @@ final class TmdbDatasource implements MovieRemoteDatasource {
           return TmdbApiUrls.upcomingMovies;
         case MovieCollection.topRated:
           return TmdbApiUrls.topRatedMovies;
-        case MovieCollection.favorite:
-          logger.e('Favorite collection requested from TmdbDatasource');
-          throw ServerException(
-            detail: "Your favorite movies are in the cache.",
-          );
       }
     }
 
