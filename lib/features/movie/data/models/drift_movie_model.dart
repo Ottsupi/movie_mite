@@ -54,8 +54,7 @@ final class DriftMovieModel {
     );
   }
 
-  factory DriftMovieModel.empty() {
-    final entity = MovieEntity.empty();
+  factory DriftMovieModel.fromEntity(MovieEntity entity) {
     return DriftMovieModel(
       id: null,
       isAdult: entity.isAdult,
@@ -72,6 +71,10 @@ final class DriftMovieModel {
       source: entity.source,
       sourceId: entity.sourceId,
     );
+  }
+
+  factory DriftMovieModel.empty() {
+    return DriftMovieModel.fromEntity(MovieEntity.empty());
   }
 
   DriftMovieTableCompanion toCompanion() {
