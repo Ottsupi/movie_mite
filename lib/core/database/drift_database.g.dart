@@ -3,12 +3,12 @@
 part of 'drift_database.dart';
 
 // ignore_for_file: type=lint
-class $DriftMovieModelTable extends DriftMovieModel
-    with TableInfo<$DriftMovieModelTable, DriftMovieModelData> {
+class $DriftMovieTableTable extends DriftMovieTable
+    with TableInfo<$DriftMovieTableTable, DriftMovieTableData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $DriftMovieModelTable(this.attachedDatabase, [this._alias]);
+  $DriftMovieTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -84,6 +84,15 @@ class $DriftMovieModelTable extends DriftMovieModel
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _genresMeta = const VerificationMeta('genres');
+  @override
+  late final GeneratedColumn<String> genres = GeneratedColumn<String>(
+    'genres',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _backdropPathMeta = const VerificationMeta(
     'backdropPath',
   );
@@ -95,12 +104,12 @@ class $DriftMovieModelTable extends DriftMovieModel
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _originalLangaugeMeta = const VerificationMeta(
-    'originalLangauge',
+  static const VerificationMeta _originalLanguageMeta = const VerificationMeta(
+    'originalLanguage',
   );
   @override
-  late final GeneratedColumn<String> originalLangauge = GeneratedColumn<String>(
-    'original_langauge',
+  late final GeneratedColumn<String> originalLanguage = GeneratedColumn<String>(
+    'original_language',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -167,8 +176,9 @@ class $DriftMovieModelTable extends DriftMovieModel
     isFavorite,
     rating,
     voteCount,
+    genres,
     backdropPath,
-    originalLangauge,
+    originalLanguage,
     originalTitle,
     overview,
     posterPath,
@@ -179,10 +189,10 @@ class $DriftMovieModelTable extends DriftMovieModel
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'drift_movie_model';
+  static const String $name = 'drift_movie_table';
   @override
   VerificationContext validateIntegrity(
-    Insertable<DriftMovieModelData> instance, {
+    Insertable<DriftMovieTableData> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -230,6 +240,14 @@ class $DriftMovieModelTable extends DriftMovieModel
     } else if (isInserting) {
       context.missing(_voteCountMeta);
     }
+    if (data.containsKey('genres')) {
+      context.handle(
+        _genresMeta,
+        genres.isAcceptableOrUnknown(data['genres']!, _genresMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_genresMeta);
+    }
     if (data.containsKey('backdrop_path')) {
       context.handle(
         _backdropPathMeta,
@@ -241,16 +259,16 @@ class $DriftMovieModelTable extends DriftMovieModel
     } else if (isInserting) {
       context.missing(_backdropPathMeta);
     }
-    if (data.containsKey('original_langauge')) {
+    if (data.containsKey('original_language')) {
       context.handle(
-        _originalLangaugeMeta,
-        originalLangauge.isAcceptableOrUnknown(
-          data['original_langauge']!,
-          _originalLangaugeMeta,
+        _originalLanguageMeta,
+        originalLanguage.isAcceptableOrUnknown(
+          data['original_language']!,
+          _originalLanguageMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_originalLangaugeMeta);
+      context.missing(_originalLanguageMeta);
     }
     if (data.containsKey('original_title')) {
       context.handle(
@@ -301,9 +319,9 @@ class $DriftMovieModelTable extends DriftMovieModel
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  DriftMovieModelData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  DriftMovieTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return DriftMovieModelData(
+    return DriftMovieTableData(
       id:
           attachedDatabase.typeMapping.read(
             DriftSqlType.int,
@@ -334,15 +352,20 @@ class $DriftMovieModelTable extends DriftMovieModel
             DriftSqlType.int,
             data['${effectivePrefix}vote_count'],
           )!,
+      genres:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}genres'],
+          )!,
       backdropPath:
           attachedDatabase.typeMapping.read(
             DriftSqlType.string,
             data['${effectivePrefix}backdrop_path'],
           )!,
-      originalLangauge:
+      originalLanguage:
           attachedDatabase.typeMapping.read(
             DriftSqlType.string,
-            data['${effectivePrefix}original_langauge'],
+            data['${effectivePrefix}original_language'],
           )!,
       originalTitle:
           attachedDatabase.typeMapping.read(
@@ -373,35 +396,37 @@ class $DriftMovieModelTable extends DriftMovieModel
   }
 
   @override
-  $DriftMovieModelTable createAlias(String alias) {
-    return $DriftMovieModelTable(attachedDatabase, alias);
+  $DriftMovieTableTable createAlias(String alias) {
+    return $DriftMovieTableTable(attachedDatabase, alias);
   }
 }
 
-class DriftMovieModelData extends DataClass
-    implements Insertable<DriftMovieModelData> {
+class DriftMovieTableData extends DataClass
+    implements Insertable<DriftMovieTableData> {
   final int id;
   final bool isAdult;
   final bool isCached;
   final bool isFavorite;
   final double rating;
   final int voteCount;
+  final String genres;
   final String backdropPath;
-  final String originalLangauge;
+  final String originalLanguage;
   final String originalTitle;
   final String overview;
   final String posterPath;
   final String source;
   final String sourceId;
-  const DriftMovieModelData({
+  const DriftMovieTableData({
     required this.id,
     required this.isAdult,
     required this.isCached,
     required this.isFavorite,
     required this.rating,
     required this.voteCount,
+    required this.genres,
     required this.backdropPath,
-    required this.originalLangauge,
+    required this.originalLanguage,
     required this.originalTitle,
     required this.overview,
     required this.posterPath,
@@ -417,8 +442,9 @@ class DriftMovieModelData extends DataClass
     map['is_favorite'] = Variable<bool>(isFavorite);
     map['rating'] = Variable<double>(rating);
     map['vote_count'] = Variable<int>(voteCount);
+    map['genres'] = Variable<String>(genres);
     map['backdrop_path'] = Variable<String>(backdropPath);
-    map['original_langauge'] = Variable<String>(originalLangauge);
+    map['original_language'] = Variable<String>(originalLanguage);
     map['original_title'] = Variable<String>(originalTitle);
     map['overview'] = Variable<String>(overview);
     map['poster_path'] = Variable<String>(posterPath);
@@ -427,16 +453,17 @@ class DriftMovieModelData extends DataClass
     return map;
   }
 
-  DriftMovieModelCompanion toCompanion(bool nullToAbsent) {
-    return DriftMovieModelCompanion(
+  DriftMovieTableCompanion toCompanion(bool nullToAbsent) {
+    return DriftMovieTableCompanion(
       id: Value(id),
       isAdult: Value(isAdult),
       isCached: Value(isCached),
       isFavorite: Value(isFavorite),
       rating: Value(rating),
       voteCount: Value(voteCount),
+      genres: Value(genres),
       backdropPath: Value(backdropPath),
-      originalLangauge: Value(originalLangauge),
+      originalLanguage: Value(originalLanguage),
       originalTitle: Value(originalTitle),
       overview: Value(overview),
       posterPath: Value(posterPath),
@@ -445,20 +472,21 @@ class DriftMovieModelData extends DataClass
     );
   }
 
-  factory DriftMovieModelData.fromJson(
+  factory DriftMovieTableData.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return DriftMovieModelData(
+    return DriftMovieTableData(
       id: serializer.fromJson<int>(json['id']),
       isAdult: serializer.fromJson<bool>(json['isAdult']),
       isCached: serializer.fromJson<bool>(json['isCached']),
       isFavorite: serializer.fromJson<bool>(json['isFavorite']),
       rating: serializer.fromJson<double>(json['rating']),
       voteCount: serializer.fromJson<int>(json['voteCount']),
+      genres: serializer.fromJson<String>(json['genres']),
       backdropPath: serializer.fromJson<String>(json['backdropPath']),
-      originalLangauge: serializer.fromJson<String>(json['originalLangauge']),
+      originalLanguage: serializer.fromJson<String>(json['originalLanguage']),
       originalTitle: serializer.fromJson<String>(json['originalTitle']),
       overview: serializer.fromJson<String>(json['overview']),
       posterPath: serializer.fromJson<String>(json['posterPath']),
@@ -476,8 +504,9 @@ class DriftMovieModelData extends DataClass
       'isFavorite': serializer.toJson<bool>(isFavorite),
       'rating': serializer.toJson<double>(rating),
       'voteCount': serializer.toJson<int>(voteCount),
+      'genres': serializer.toJson<String>(genres),
       'backdropPath': serializer.toJson<String>(backdropPath),
-      'originalLangauge': serializer.toJson<String>(originalLangauge),
+      'originalLanguage': serializer.toJson<String>(originalLanguage),
       'originalTitle': serializer.toJson<String>(originalTitle),
       'overview': serializer.toJson<String>(overview),
       'posterPath': serializer.toJson<String>(posterPath),
@@ -486,37 +515,39 @@ class DriftMovieModelData extends DataClass
     };
   }
 
-  DriftMovieModelData copyWith({
+  DriftMovieTableData copyWith({
     int? id,
     bool? isAdult,
     bool? isCached,
     bool? isFavorite,
     double? rating,
     int? voteCount,
+    String? genres,
     String? backdropPath,
-    String? originalLangauge,
+    String? originalLanguage,
     String? originalTitle,
     String? overview,
     String? posterPath,
     String? source,
     String? sourceId,
-  }) => DriftMovieModelData(
+  }) => DriftMovieTableData(
     id: id ?? this.id,
     isAdult: isAdult ?? this.isAdult,
     isCached: isCached ?? this.isCached,
     isFavorite: isFavorite ?? this.isFavorite,
     rating: rating ?? this.rating,
     voteCount: voteCount ?? this.voteCount,
+    genres: genres ?? this.genres,
     backdropPath: backdropPath ?? this.backdropPath,
-    originalLangauge: originalLangauge ?? this.originalLangauge,
+    originalLanguage: originalLanguage ?? this.originalLanguage,
     originalTitle: originalTitle ?? this.originalTitle,
     overview: overview ?? this.overview,
     posterPath: posterPath ?? this.posterPath,
     source: source ?? this.source,
     sourceId: sourceId ?? this.sourceId,
   );
-  DriftMovieModelData copyWithCompanion(DriftMovieModelCompanion data) {
-    return DriftMovieModelData(
+  DriftMovieTableData copyWithCompanion(DriftMovieTableCompanion data) {
+    return DriftMovieTableData(
       id: data.id.present ? data.id.value : this.id,
       isAdult: data.isAdult.present ? data.isAdult.value : this.isAdult,
       isCached: data.isCached.present ? data.isCached.value : this.isCached,
@@ -524,14 +555,15 @@ class DriftMovieModelData extends DataClass
           data.isFavorite.present ? data.isFavorite.value : this.isFavorite,
       rating: data.rating.present ? data.rating.value : this.rating,
       voteCount: data.voteCount.present ? data.voteCount.value : this.voteCount,
+      genres: data.genres.present ? data.genres.value : this.genres,
       backdropPath:
           data.backdropPath.present
               ? data.backdropPath.value
               : this.backdropPath,
-      originalLangauge:
-          data.originalLangauge.present
-              ? data.originalLangauge.value
-              : this.originalLangauge,
+      originalLanguage:
+          data.originalLanguage.present
+              ? data.originalLanguage.value
+              : this.originalLanguage,
       originalTitle:
           data.originalTitle.present
               ? data.originalTitle.value
@@ -546,15 +578,16 @@ class DriftMovieModelData extends DataClass
 
   @override
   String toString() {
-    return (StringBuffer('DriftMovieModelData(')
+    return (StringBuffer('DriftMovieTableData(')
           ..write('id: $id, ')
           ..write('isAdult: $isAdult, ')
           ..write('isCached: $isCached, ')
           ..write('isFavorite: $isFavorite, ')
           ..write('rating: $rating, ')
           ..write('voteCount: $voteCount, ')
+          ..write('genres: $genres, ')
           ..write('backdropPath: $backdropPath, ')
-          ..write('originalLangauge: $originalLangauge, ')
+          ..write('originalLanguage: $originalLanguage, ')
           ..write('originalTitle: $originalTitle, ')
           ..write('overview: $overview, ')
           ..write('posterPath: $posterPath, ')
@@ -572,8 +605,9 @@ class DriftMovieModelData extends DataClass
     isFavorite,
     rating,
     voteCount,
+    genres,
     backdropPath,
-    originalLangauge,
+    originalLanguage,
     originalTitle,
     overview,
     posterPath,
@@ -583,15 +617,16 @@ class DriftMovieModelData extends DataClass
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is DriftMovieModelData &&
+      (other is DriftMovieTableData &&
           other.id == this.id &&
           other.isAdult == this.isAdult &&
           other.isCached == this.isCached &&
           other.isFavorite == this.isFavorite &&
           other.rating == this.rating &&
           other.voteCount == this.voteCount &&
+          other.genres == this.genres &&
           other.backdropPath == this.backdropPath &&
-          other.originalLangauge == this.originalLangauge &&
+          other.originalLanguage == this.originalLanguage &&
           other.originalTitle == this.originalTitle &&
           other.overview == this.overview &&
           other.posterPath == this.posterPath &&
@@ -599,44 +634,47 @@ class DriftMovieModelData extends DataClass
           other.sourceId == this.sourceId);
 }
 
-class DriftMovieModelCompanion extends UpdateCompanion<DriftMovieModelData> {
+class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
   final Value<int> id;
   final Value<bool> isAdult;
   final Value<bool> isCached;
   final Value<bool> isFavorite;
   final Value<double> rating;
   final Value<int> voteCount;
+  final Value<String> genres;
   final Value<String> backdropPath;
-  final Value<String> originalLangauge;
+  final Value<String> originalLanguage;
   final Value<String> originalTitle;
   final Value<String> overview;
   final Value<String> posterPath;
   final Value<String> source;
   final Value<String> sourceId;
-  const DriftMovieModelCompanion({
+  const DriftMovieTableCompanion({
     this.id = const Value.absent(),
     this.isAdult = const Value.absent(),
     this.isCached = const Value.absent(),
     this.isFavorite = const Value.absent(),
     this.rating = const Value.absent(),
     this.voteCount = const Value.absent(),
+    this.genres = const Value.absent(),
     this.backdropPath = const Value.absent(),
-    this.originalLangauge = const Value.absent(),
+    this.originalLanguage = const Value.absent(),
     this.originalTitle = const Value.absent(),
     this.overview = const Value.absent(),
     this.posterPath = const Value.absent(),
     this.source = const Value.absent(),
     this.sourceId = const Value.absent(),
   });
-  DriftMovieModelCompanion.insert({
+  DriftMovieTableCompanion.insert({
     this.id = const Value.absent(),
     required bool isAdult,
     required bool isCached,
     required bool isFavorite,
     required double rating,
     required int voteCount,
+    required String genres,
     required String backdropPath,
-    required String originalLangauge,
+    required String originalLanguage,
     required String originalTitle,
     required String overview,
     required String posterPath,
@@ -647,22 +685,24 @@ class DriftMovieModelCompanion extends UpdateCompanion<DriftMovieModelData> {
        isFavorite = Value(isFavorite),
        rating = Value(rating),
        voteCount = Value(voteCount),
+       genres = Value(genres),
        backdropPath = Value(backdropPath),
-       originalLangauge = Value(originalLangauge),
+       originalLanguage = Value(originalLanguage),
        originalTitle = Value(originalTitle),
        overview = Value(overview),
        posterPath = Value(posterPath),
        source = Value(source),
        sourceId = Value(sourceId);
-  static Insertable<DriftMovieModelData> custom({
+  static Insertable<DriftMovieTableData> custom({
     Expression<int>? id,
     Expression<bool>? isAdult,
     Expression<bool>? isCached,
     Expression<bool>? isFavorite,
     Expression<double>? rating,
     Expression<int>? voteCount,
+    Expression<String>? genres,
     Expression<String>? backdropPath,
-    Expression<String>? originalLangauge,
+    Expression<String>? originalLanguage,
     Expression<String>? originalTitle,
     Expression<String>? overview,
     Expression<String>? posterPath,
@@ -676,8 +716,9 @@ class DriftMovieModelCompanion extends UpdateCompanion<DriftMovieModelData> {
       if (isFavorite != null) 'is_favorite': isFavorite,
       if (rating != null) 'rating': rating,
       if (voteCount != null) 'vote_count': voteCount,
+      if (genres != null) 'genres': genres,
       if (backdropPath != null) 'backdrop_path': backdropPath,
-      if (originalLangauge != null) 'original_langauge': originalLangauge,
+      if (originalLanguage != null) 'original_language': originalLanguage,
       if (originalTitle != null) 'original_title': originalTitle,
       if (overview != null) 'overview': overview,
       if (posterPath != null) 'poster_path': posterPath,
@@ -686,30 +727,32 @@ class DriftMovieModelCompanion extends UpdateCompanion<DriftMovieModelData> {
     });
   }
 
-  DriftMovieModelCompanion copyWith({
+  DriftMovieTableCompanion copyWith({
     Value<int>? id,
     Value<bool>? isAdult,
     Value<bool>? isCached,
     Value<bool>? isFavorite,
     Value<double>? rating,
     Value<int>? voteCount,
+    Value<String>? genres,
     Value<String>? backdropPath,
-    Value<String>? originalLangauge,
+    Value<String>? originalLanguage,
     Value<String>? originalTitle,
     Value<String>? overview,
     Value<String>? posterPath,
     Value<String>? source,
     Value<String>? sourceId,
   }) {
-    return DriftMovieModelCompanion(
+    return DriftMovieTableCompanion(
       id: id ?? this.id,
       isAdult: isAdult ?? this.isAdult,
       isCached: isCached ?? this.isCached,
       isFavorite: isFavorite ?? this.isFavorite,
       rating: rating ?? this.rating,
       voteCount: voteCount ?? this.voteCount,
+      genres: genres ?? this.genres,
       backdropPath: backdropPath ?? this.backdropPath,
-      originalLangauge: originalLangauge ?? this.originalLangauge,
+      originalLanguage: originalLanguage ?? this.originalLanguage,
       originalTitle: originalTitle ?? this.originalTitle,
       overview: overview ?? this.overview,
       posterPath: posterPath ?? this.posterPath,
@@ -739,11 +782,14 @@ class DriftMovieModelCompanion extends UpdateCompanion<DriftMovieModelData> {
     if (voteCount.present) {
       map['vote_count'] = Variable<int>(voteCount.value);
     }
+    if (genres.present) {
+      map['genres'] = Variable<String>(genres.value);
+    }
     if (backdropPath.present) {
       map['backdrop_path'] = Variable<String>(backdropPath.value);
     }
-    if (originalLangauge.present) {
-      map['original_langauge'] = Variable<String>(originalLangauge.value);
+    if (originalLanguage.present) {
+      map['original_language'] = Variable<String>(originalLanguage.value);
     }
     if (originalTitle.present) {
       map['original_title'] = Variable<String>(originalTitle.value);
@@ -765,15 +811,16 @@ class DriftMovieModelCompanion extends UpdateCompanion<DriftMovieModelData> {
 
   @override
   String toString() {
-    return (StringBuffer('DriftMovieModelCompanion(')
+    return (StringBuffer('DriftMovieTableCompanion(')
           ..write('id: $id, ')
           ..write('isAdult: $isAdult, ')
           ..write('isCached: $isCached, ')
           ..write('isFavorite: $isFavorite, ')
           ..write('rating: $rating, ')
           ..write('voteCount: $voteCount, ')
+          ..write('genres: $genres, ')
           ..write('backdropPath: $backdropPath, ')
-          ..write('originalLangauge: $originalLangauge, ')
+          ..write('originalLanguage: $originalLanguage, ')
           ..write('originalTitle: $originalTitle, ')
           ..write('overview: $overview, ')
           ..write('posterPath: $posterPath, ')
@@ -787,42 +834,44 @@ class DriftMovieModelCompanion extends UpdateCompanion<DriftMovieModelData> {
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
-  late final $DriftMovieModelTable driftMovieModel = $DriftMovieModelTable(
+  late final $DriftMovieTableTable driftMovieTable = $DriftMovieTableTable(
     this,
   );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [driftMovieModel];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [driftMovieTable];
 }
 
-typedef $$DriftMovieModelTableCreateCompanionBuilder =
-    DriftMovieModelCompanion Function({
+typedef $$DriftMovieTableTableCreateCompanionBuilder =
+    DriftMovieTableCompanion Function({
       Value<int> id,
       required bool isAdult,
       required bool isCached,
       required bool isFavorite,
       required double rating,
       required int voteCount,
+      required String genres,
       required String backdropPath,
-      required String originalLangauge,
+      required String originalLanguage,
       required String originalTitle,
       required String overview,
       required String posterPath,
       required String source,
       required String sourceId,
     });
-typedef $$DriftMovieModelTableUpdateCompanionBuilder =
-    DriftMovieModelCompanion Function({
+typedef $$DriftMovieTableTableUpdateCompanionBuilder =
+    DriftMovieTableCompanion Function({
       Value<int> id,
       Value<bool> isAdult,
       Value<bool> isCached,
       Value<bool> isFavorite,
       Value<double> rating,
       Value<int> voteCount,
+      Value<String> genres,
       Value<String> backdropPath,
-      Value<String> originalLangauge,
+      Value<String> originalLanguage,
       Value<String> originalTitle,
       Value<String> overview,
       Value<String> posterPath,
@@ -830,9 +879,9 @@ typedef $$DriftMovieModelTableUpdateCompanionBuilder =
       Value<String> sourceId,
     });
 
-class $$DriftMovieModelTableFilterComposer
-    extends Composer<_$AppDatabase, $DriftMovieModelTable> {
-  $$DriftMovieModelTableFilterComposer({
+class $$DriftMovieTableTableFilterComposer
+    extends Composer<_$AppDatabase, $DriftMovieTableTable> {
+  $$DriftMovieTableTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -869,13 +918,18 @@ class $$DriftMovieModelTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get genres => $composableBuilder(
+    column: $table.genres,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get backdropPath => $composableBuilder(
     column: $table.backdropPath,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get originalLangauge => $composableBuilder(
-    column: $table.originalLangauge,
+  ColumnFilters<String> get originalLanguage => $composableBuilder(
+    column: $table.originalLanguage,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -905,9 +959,9 @@ class $$DriftMovieModelTableFilterComposer
   );
 }
 
-class $$DriftMovieModelTableOrderingComposer
-    extends Composer<_$AppDatabase, $DriftMovieModelTable> {
-  $$DriftMovieModelTableOrderingComposer({
+class $$DriftMovieTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $DriftMovieTableTable> {
+  $$DriftMovieTableTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -944,13 +998,18 @@ class $$DriftMovieModelTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get genres => $composableBuilder(
+    column: $table.genres,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get backdropPath => $composableBuilder(
     column: $table.backdropPath,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get originalLangauge => $composableBuilder(
-    column: $table.originalLangauge,
+  ColumnOrderings<String> get originalLanguage => $composableBuilder(
+    column: $table.originalLanguage,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -980,9 +1039,9 @@ class $$DriftMovieModelTableOrderingComposer
   );
 }
 
-class $$DriftMovieModelTableAnnotationComposer
-    extends Composer<_$AppDatabase, $DriftMovieModelTable> {
-  $$DriftMovieModelTableAnnotationComposer({
+class $$DriftMovieTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DriftMovieTableTable> {
+  $$DriftMovieTableTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1009,13 +1068,16 @@ class $$DriftMovieModelTableAnnotationComposer
   GeneratedColumn<int> get voteCount =>
       $composableBuilder(column: $table.voteCount, builder: (column) => column);
 
+  GeneratedColumn<String> get genres =>
+      $composableBuilder(column: $table.genres, builder: (column) => column);
+
   GeneratedColumn<String> get backdropPath => $composableBuilder(
     column: $table.backdropPath,
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get originalLangauge => $composableBuilder(
-    column: $table.originalLangauge,
+  GeneratedColumn<String> get originalLanguage => $composableBuilder(
+    column: $table.originalLanguage,
     builder: (column) => column,
   );
 
@@ -1039,45 +1101,45 @@ class $$DriftMovieModelTableAnnotationComposer
       $composableBuilder(column: $table.sourceId, builder: (column) => column);
 }
 
-class $$DriftMovieModelTableTableManager
+class $$DriftMovieTableTableTableManager
     extends
         RootTableManager<
           _$AppDatabase,
-          $DriftMovieModelTable,
-          DriftMovieModelData,
-          $$DriftMovieModelTableFilterComposer,
-          $$DriftMovieModelTableOrderingComposer,
-          $$DriftMovieModelTableAnnotationComposer,
-          $$DriftMovieModelTableCreateCompanionBuilder,
-          $$DriftMovieModelTableUpdateCompanionBuilder,
+          $DriftMovieTableTable,
+          DriftMovieTableData,
+          $$DriftMovieTableTableFilterComposer,
+          $$DriftMovieTableTableOrderingComposer,
+          $$DriftMovieTableTableAnnotationComposer,
+          $$DriftMovieTableTableCreateCompanionBuilder,
+          $$DriftMovieTableTableUpdateCompanionBuilder,
           (
-            DriftMovieModelData,
+            DriftMovieTableData,
             BaseReferences<
               _$AppDatabase,
-              $DriftMovieModelTable,
-              DriftMovieModelData
+              $DriftMovieTableTable,
+              DriftMovieTableData
             >,
           ),
-          DriftMovieModelData,
+          DriftMovieTableData,
           PrefetchHooks Function()
         > {
-  $$DriftMovieModelTableTableManager(
+  $$DriftMovieTableTableTableManager(
     _$AppDatabase db,
-    $DriftMovieModelTable table,
+    $DriftMovieTableTable table,
   ) : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer:
               () =>
-                  $$DriftMovieModelTableFilterComposer($db: db, $table: table),
+                  $$DriftMovieTableTableFilterComposer($db: db, $table: table),
           createOrderingComposer:
-              () => $$DriftMovieModelTableOrderingComposer(
+              () => $$DriftMovieTableTableOrderingComposer(
                 $db: db,
                 $table: table,
               ),
           createComputedFieldComposer:
-              () => $$DriftMovieModelTableAnnotationComposer(
+              () => $$DriftMovieTableTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
@@ -1089,22 +1151,24 @@ class $$DriftMovieModelTableTableManager
                 Value<bool> isFavorite = const Value.absent(),
                 Value<double> rating = const Value.absent(),
                 Value<int> voteCount = const Value.absent(),
+                Value<String> genres = const Value.absent(),
                 Value<String> backdropPath = const Value.absent(),
-                Value<String> originalLangauge = const Value.absent(),
+                Value<String> originalLanguage = const Value.absent(),
                 Value<String> originalTitle = const Value.absent(),
                 Value<String> overview = const Value.absent(),
                 Value<String> posterPath = const Value.absent(),
                 Value<String> source = const Value.absent(),
                 Value<String> sourceId = const Value.absent(),
-              }) => DriftMovieModelCompanion(
+              }) => DriftMovieTableCompanion(
                 id: id,
                 isAdult: isAdult,
                 isCached: isCached,
                 isFavorite: isFavorite,
                 rating: rating,
                 voteCount: voteCount,
+                genres: genres,
                 backdropPath: backdropPath,
-                originalLangauge: originalLangauge,
+                originalLanguage: originalLanguage,
                 originalTitle: originalTitle,
                 overview: overview,
                 posterPath: posterPath,
@@ -1119,22 +1183,24 @@ class $$DriftMovieModelTableTableManager
                 required bool isFavorite,
                 required double rating,
                 required int voteCount,
+                required String genres,
                 required String backdropPath,
-                required String originalLangauge,
+                required String originalLanguage,
                 required String originalTitle,
                 required String overview,
                 required String posterPath,
                 required String source,
                 required String sourceId,
-              }) => DriftMovieModelCompanion.insert(
+              }) => DriftMovieTableCompanion.insert(
                 id: id,
                 isAdult: isAdult,
                 isCached: isCached,
                 isFavorite: isFavorite,
                 rating: rating,
                 voteCount: voteCount,
+                genres: genres,
                 backdropPath: backdropPath,
-                originalLangauge: originalLangauge,
+                originalLanguage: originalLanguage,
                 originalTitle: originalTitle,
                 overview: overview,
                 posterPath: posterPath,
@@ -1156,31 +1222,31 @@ class $$DriftMovieModelTableTableManager
       );
 }
 
-typedef $$DriftMovieModelTableProcessedTableManager =
+typedef $$DriftMovieTableTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
-      $DriftMovieModelTable,
-      DriftMovieModelData,
-      $$DriftMovieModelTableFilterComposer,
-      $$DriftMovieModelTableOrderingComposer,
-      $$DriftMovieModelTableAnnotationComposer,
-      $$DriftMovieModelTableCreateCompanionBuilder,
-      $$DriftMovieModelTableUpdateCompanionBuilder,
+      $DriftMovieTableTable,
+      DriftMovieTableData,
+      $$DriftMovieTableTableFilterComposer,
+      $$DriftMovieTableTableOrderingComposer,
+      $$DriftMovieTableTableAnnotationComposer,
+      $$DriftMovieTableTableCreateCompanionBuilder,
+      $$DriftMovieTableTableUpdateCompanionBuilder,
       (
-        DriftMovieModelData,
+        DriftMovieTableData,
         BaseReferences<
           _$AppDatabase,
-          $DriftMovieModelTable,
-          DriftMovieModelData
+          $DriftMovieTableTable,
+          DriftMovieTableData
         >,
       ),
-      DriftMovieModelData,
+      DriftMovieTableData,
       PrefetchHooks Function()
     >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
-  $$DriftMovieModelTableTableManager get driftMovieModel =>
-      $$DriftMovieModelTableTableManager(_db, _db.driftMovieModel);
+  $$DriftMovieTableTableTableManager get driftMovieTable =>
+      $$DriftMovieTableTableTableManager(_db, _db.driftMovieTable);
 }

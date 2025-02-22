@@ -4,15 +4,16 @@ import 'package:path_provider/path_provider.dart';
 
 part 'drift_database.g.dart';
 
-class DriftMovieModel extends Table {
+class DriftMovieTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   BoolColumn get isAdult => boolean()();
   BoolColumn get isCached => boolean()();
   BoolColumn get isFavorite => boolean()();
   RealColumn get rating => real()();
   IntColumn get voteCount => integer()();
+  TextColumn get genres => text()();
   TextColumn get backdropPath => text()();
-  TextColumn get originalLangauge => text()();
+  TextColumn get originalLanguage => text()();
   TextColumn get originalTitle => text()();
   TextColumn get overview => text()();
   TextColumn get posterPath => text()();
@@ -20,17 +21,17 @@ class DriftMovieModel extends Table {
   TextColumn get sourceId => text()();
 }
 
-@DriftDatabase(tables: [DriftMovieModel])
+@DriftDatabase(tables: [DriftMovieTable])
 class AppDatabase extends _$AppDatabase {
   // After generating code, this class needs to define a `schemaVersion` getter
   // and a constructor telling drift where the database should be stored.
   // These are described in the getting started guide: https://drift.simonbinder.eu/setup/
-  AppDatabase() : super(_openConnection());
+  AppDatabase(QueryExecutor e) : super(e);
 
   @override
   int get schemaVersion => 1;
 
-  static QueryExecutor _openConnection() {
+  static QueryExecutor openConnection() {
     return driftDatabase(
       name: 'drift_database',
       native: const DriftNativeOptions(
