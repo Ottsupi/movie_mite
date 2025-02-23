@@ -83,7 +83,7 @@ final class TmdbMovieModel extends Equatable {
       rating: voteAverage ?? Decimal.zero,
       voteCount: voteCount ?? 0,
       genres: [],
-      backdropPath: this.posterPath ?? '',
+      backdropPath: this.backdropPath ?? '',
       originalLanguage: this.originalLanguage ?? '',
       originalTitle: this.originalTitle ?? '',
       overview: this.overview ?? '',
