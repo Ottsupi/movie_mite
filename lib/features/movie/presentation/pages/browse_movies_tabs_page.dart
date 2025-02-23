@@ -14,6 +14,7 @@ import 'package:movie_mite/features/movie/presentation/logic/favorite_movies/fav
 import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list_status/movie_list_status_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/pages/favorite_movies_tab_view.dart';
+import 'package:movie_mite/features/movie/presentation/pages/search_movies_tab_view.dart';
 import 'package:movie_mite/features/movie/presentation/widgets/movie_list_builder.dart';
 import 'package:movie_mite/features/movie/presentation/widgets/movie_list_status_builder.dart';
 import 'package:rxdart/rxdart.dart';
@@ -93,13 +94,7 @@ class BrowseCollectionTabView extends StatelessWidget {
     return TabBarView(
       children: [
         FavoriteMoviesTabView(),
-        CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              child: Container(child: Center(child: Text('Search'))),
-            ),
-          ],
-        ),
+        SearchMoviesTabView(),
         for (MovieCollection collection in includedCollections)
           BrowseCollectionTab(collection: collection),
       ],
