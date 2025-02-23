@@ -66,6 +66,12 @@ class FavoriteMovies extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () {
+        BlocProvider.of<BrowseMoviesBloc>(context).add(
+          FetchMoviesByCollection(
+            page: 1,
+            collection: MovieCollection.favorite,
+          ),
+        );
         return Future.delayed(Durations.extralong4);
       },
       child: CustomScrollView(slivers: [MovieListBuilder()]),
