@@ -92,4 +92,36 @@ final class MovieEntity extends Equatable {
     source,
     sourceId,
   ];
+
+  MovieEntity copyWith({
+    bool? isAdult,
+    bool? isCached,
+    bool? isFavorite,
+    Decimal? rating,
+    int? voteCount,
+    List<String>? genres,
+    String? backdropPath,
+    String? originalLanguage,
+    String? originalTitle,
+    String? overview,
+    String? posterPath,
+    String? source,
+    String? sourceId,
+  }) {
+    return MovieEntity(
+      isAdult: isAdult ?? this.isAdult,
+      isCached: isCached ?? this.isCached,
+      isFavorite: isFavorite ?? this.isFavorite,
+      rating: rating ?? this.rating,
+      voteCount: voteCount ?? this.voteCount,
+      genres: genres ?? this.genres,
+      backdropPath: backdropPath ?? this.backdropPath,
+      originalLanguage: originalLanguage ?? this.originalLanguage,
+      originalTitle: originalTitle ?? this.originalTitle,
+      overview: overview ?? this.overview,
+      posterPath: posterPath ?? this.posterPath,
+      source: source ?? this.source,
+      sourceId: sourceId ?? this.sourceId,
+    );
+  }
 }
