@@ -52,10 +52,18 @@ class BrowseMoviesTabsPage extends StatelessWidget {
 class BrowseMoviesTabsScreen extends StatelessWidget {
   const BrowseMoviesTabsScreen({super.key});
 
+  static const includedCollections = [
+    MovieCollection.popular,
+    MovieCollection.nowShowing,
+    MovieCollection.topRated,
+    MovieCollection.trending,
+    MovieCollection.upcoming,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2 + MovieCollection.values.length,
+      length: 2 + includedCollections.length,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Movie Mite'),
@@ -64,19 +72,21 @@ class BrowseMoviesTabsScreen extends StatelessWidget {
             tabs: [
               Tab(icon: Icon(Icons.favorite)),
               Tab(icon: Icon(Icons.search)),
-              for (MovieCollection collection in MovieCollection.values)
+              for (MovieCollection collection in includedCollections)
                 Tab(text: collection.name),
             ],
           ),
         ),
-        body: BrowseCollectionTabView(),
+        body: BrowseCollectionTabView(includedCollections),
       ),
     );
   }
 }
 
 class BrowseCollectionTabView extends StatelessWidget {
-  const BrowseCollectionTabView({super.key});
+  const BrowseCollectionTabView(this.includedCollections, {super.key});
+
+  final List<MovieCollection> includedCollections;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +100,7 @@ class BrowseCollectionTabView extends StatelessWidget {
             ),
           ],
         ),
-        for (MovieCollection collection in MovieCollection.values)
+        for (MovieCollection collection in includedCollections)
           BrowseCollectionTab(collection: collection),
       ],
     );
