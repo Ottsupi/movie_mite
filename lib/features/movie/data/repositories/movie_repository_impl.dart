@@ -85,9 +85,21 @@ final class MovieRepositoryImpl implements MovieRepository {
   Future<Either<Failure, List<MovieEntity>>> searchMovieByTitle(
     String title,
     int page,
-  ) {
-    // TODO: implement searchMovieByTitle
-    throw UnimplementedError();
+  ) async {
+    try {
+      _movieListStatusController.add(MovieListStatus.initial);
+      _movieListStatusController.add(MovieListStatus.loading);
+      final result = await _remoteMovieDatasource.searchMoviesByTitle(
+        title,
+        page,
+      );
+      final entities = result.map((e) => e.toEntity()).toList();
+      _movieListStreamController.add(entities);
+      _movieListStatusController.add(MovieListStatus.networkLoaded);
+      return Right(entities);
+    } on CacheFailure catch (e) {
+      return Left(CacheFailure(detail: e.detail));
+    }
   }
 
   @override
