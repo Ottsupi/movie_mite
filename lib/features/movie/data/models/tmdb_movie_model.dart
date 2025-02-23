@@ -2,6 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:movie_mite/core/utils/json_serializable/decimal.dart';
+import 'package:movie_mite/core/utils/json_serializable/empty_string_datetime.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 
 part 'tmdb_movie_model.g.dart';
@@ -41,6 +42,7 @@ final class TmdbMovieModel extends Equatable {
   @JsonKey(name: 'poster_path')
   final String? posterPath;
   @JsonKey(name: 'release_date')
+  @EmptyStringDateTimeConverter()
   final DateTime? releaseDate;
   final String? title;
   final bool? video;

@@ -23,10 +23,9 @@ TmdbMovieModel _$TmdbMovieModelFromJson(Map<String, dynamic> json) =>
         const DecimalJsonConverter().fromJson,
       ),
       posterPath: json['poster_path'] as String?,
-      releaseDate:
-          json['release_date'] == null
-              ? null
-              : DateTime.parse(json['release_date'] as String),
+      releaseDate: const EmptyStringDateTimeConverter().fromJson(
+        json['release_date'] as String?,
+      ),
       title: json['title'] as String?,
       video: json['video'] as bool?,
       voteAverage: _$JsonConverterFromJson<double, Decimal>(
@@ -50,7 +49,9 @@ Map<String, dynamic> _$TmdbMovieModelToJson(TmdbMovieModel instance) =>
         const DecimalJsonConverter().toJson,
       ),
       'poster_path': instance.posterPath,
-      'release_date': instance.releaseDate?.toIso8601String(),
+      'release_date': const EmptyStringDateTimeConverter().toJson(
+        instance.releaseDate,
+      ),
       'title': instance.title,
       'video': instance.video,
       'vote_average': _$JsonConverterToJson<double, Decimal>(
