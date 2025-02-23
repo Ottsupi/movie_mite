@@ -7,4 +7,6 @@ final class TmdbApiUrls {
   static const String topRatedMovies = "$baseUrl/3/movie/top_rated";
   static const String trendingMovies = "$baseUrl/3/trending/movie/day";
   static const String upcomingMovies = "$baseUrl/3/movie/upcoming";
+
+  static const String searchMovieByTitle = "$baseUrl/3/search/movie";
 }
