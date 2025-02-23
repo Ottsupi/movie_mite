@@ -15,6 +15,7 @@ General Guiding Principles
 
 * Days 1-3: fiddled with architecture around the api
 * Day 4: Implemented local storage of favorite movies
+* Day 5: Implemented search movies and add & remove favorite movies
 
 ## Developer Notes
 
