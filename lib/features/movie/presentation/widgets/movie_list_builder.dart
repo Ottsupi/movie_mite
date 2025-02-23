@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 import 'package:movie_mite/features/movie/presentation/logic/favorite_movies/favorite_movies_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
+import 'package:movie_mite/features/movie/presentation/pages/movie_detail_page.dart';
 
 class MovieListBuilder extends StatelessWidget {
   const MovieListBuilder({super.key});
@@ -37,6 +38,13 @@ class MoviesList extends StatelessWidget {
         itemBuilder: (context, index) {
           return MovieCard(
             movies[index],
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => MovieDetailPage(movie: movies[index]),
+                ),
+              );
+            },
             onDoubleTap:
                 () => BlocProvider.of<FavoriteMoviesBloc>(
                   context,
@@ -49,14 +57,16 @@ class MoviesList extends StatelessWidget {
 }
 
 class MovieCard extends StatelessWidget {
-  const MovieCard(this.movie, {super.key, this.onDoubleTap});
+  const MovieCard(this.movie, {super.key, this.onTap, this.onDoubleTap});
 
   final MovieEntity movie;
+  final void Function()? onTap;
   final void Function()? onDoubleTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: onTap,
       onDoubleTap: onDoubleTap,
       child: Container(
         color: Colors.black87,
