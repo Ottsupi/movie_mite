@@ -1,8 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_mite/features/movie/data/datasources/favorite_datasource.dart';
+import 'package:movie_mite/features/movie/data/repositories/favorite_repository_impl.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
+import 'package:movie_mite/features/movie/domain/repositories/favorite_repository.dart';
+import 'package:movie_mite/features/movie/presentation/logic/favorite_movies/favorite_movies_bloc.dart';
 
 class MovieDetailPage extends StatelessWidget {
   const MovieDetailPage({super.key, required this.movie});
+
+  final MovieEntity movie;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<FavoriteDatasource>(
+          create: (context) => FavoriteDatasourceImpl(),
+        ),
+        RepositoryProvider<FavoriteRepository>(
+          create:
+              (context) => FavoriteRepositoryImpl(
+                RepositoryProvider.of<FavoriteDatasource>(context),
+              ),
+        ),
+      ],
+      child: BlocProvider(
+        create:
+            (context) => FavoriteMoviesBloc(
+              RepositoryProvider.of<FavoriteRepository>(context),
+            ),
+        child: MovieDetailSreen(movie: movie),
+      ),
+    );
+  }
+}
+
+class MovieDetailSreen extends StatelessWidget {
+  const MovieDetailSreen({super.key, required this.movie});
 
   final MovieEntity movie;
 
@@ -52,23 +87,30 @@ class MovieDetailSummary extends StatelessWidget {
         SizedBox(height: 16),
         MovieRating(movie: movie),
         SizedBox(height: 4),
-        FavoriteToggle(movie.isFavorite),
+        FavoriteToggle(movie),
       ],
     );
   }
 }
 
 class FavoriteToggle extends StatelessWidget {
-  const FavoriteToggle(this.isFavorite, {super.key});
+  const FavoriteToggle(this.movie, {super.key});
 
-  final bool isFavorite;
+  final MovieEntity movie;
 
   @override
   Widget build(BuildContext context) {
-    if (isFavorite) {
+    if (movie.isFavorite) {
       return Row(
         children: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.favorite, size: 36)),
+          IconButton(
+            onPressed: () {
+              BlocProvider.of<FavoriteMoviesBloc>(
+                context,
+              ).add(RemoveFavoriteMovieEvent(movie));
+            },
+            icon: Icon(Icons.favorite, size: 36),
+          ),
           SizedBox(width: 8),
           Text(
             'Remove from Favorites',
@@ -76,20 +118,25 @@ class FavoriteToggle extends StatelessWidget {
           ),
         ],
       );
+    } else {
+      return Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              BlocProvider.of<FavoriteMoviesBloc>(
+                context,
+              ).add(AddFavoriteMovieEvent(movie));
+            },
+            icon: Icon(Icons.favorite_border, size: 36),
+          ),
+          SizedBox(width: 8),
+          Text(
+            'Add to Favorites',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ],
+      );
     }
-    return Row(
-      children: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.favorite_border, size: 36),
-        ),
-        SizedBox(width: 8),
-        Text(
-          'Add to Favorites',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-      ],
-    );
   }
 }
 
