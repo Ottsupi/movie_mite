@@ -45,10 +45,6 @@ class MoviesList extends StatelessWidget {
                 ),
               );
             },
-            onDoubleTap:
-                () => BlocProvider.of<FavoriteMoviesBloc>(
-                  context,
-                ).add(AddFavoriteMovieEvent(movies[index])),
           );
         },
       ),
