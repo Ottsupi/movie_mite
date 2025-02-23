@@ -44,10 +44,13 @@ final class FavoriteRepositoryImpl implements FavoriteRepository {
   @override
   Future<Either<Failure, void>> removeFavoriteMovie(MovieEntity movie) async {
     try {
-      await _favoriteDatasource.getFavoriteMovieBySourceId(
+      final result = await _favoriteDatasource.getFavoriteMovieBySourceId(
         source: movie.source,
         sourceId: movie.sourceId,
       );
+      if (result is DriftMovieModel && result.id != null) {
+        await _favoriteDatasource.removeFavoriteMovieById(result.id!);
+      }
       return Right(null);
     } on CacheFailure catch (e) {
       return Left(CacheFailure(detail: e.detail));
