@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:movie_mite/features/movie/data/datasources/favorite_datasource.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
 import 'package:movie_mite/features/movie/data/repositories/movie_repository_impl.dart';
 import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collection_enums.dart';
@@ -28,6 +29,7 @@ class BrowseMoviesPage extends StatelessWidget {
           create:
               (context) => MovieRepositoryImpl(
                 RepositoryProvider.of<MovieRemoteDatasource>(context),
+                RepositoryProvider.of<FavoriteDatasource>(context),
               ),
         ),
       ],
