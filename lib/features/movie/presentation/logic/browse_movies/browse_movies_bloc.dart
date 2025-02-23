@@ -46,7 +46,7 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
     final result = await GetMoviesByCollection(_movieRepository).call(params);
     result.fold(
       (failure) {
-        emit(state.copyWith(failure: failure));
+        emit(state.copyWith(page: event.page - 1, failure: failure));
       },
       (movies) {
         emit(
