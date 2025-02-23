@@ -87,7 +87,7 @@ final class MovieRepositoryImpl implements MovieRepository {
     int page,
   ) async {
     try {
-      _movieListStatusController.add(MovieListStatus.initial);
+      if (page == 1) _movieListStatusController.add(MovieListStatus.initial);
       _movieListStatusController.add(MovieListStatus.loading);
       final result = await _remoteMovieDatasource.searchMoviesByTitle(
         title,
@@ -97,8 +97,8 @@ final class MovieRepositoryImpl implements MovieRepository {
       _movieListStreamController.add(entities);
       _movieListStatusController.add(MovieListStatus.networkLoaded);
       return Right(entities);
-    } on CacheFailure catch (e) {
-      return Left(CacheFailure(detail: e.detail));
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(detail: e.detail));
     }
   }
 
