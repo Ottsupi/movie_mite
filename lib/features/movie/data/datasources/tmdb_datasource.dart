@@ -108,7 +108,11 @@ final class TmdbDatasource implements MovieRemoteDatasource {
         detail: e.message ?? "Could not search for movies entitled \"$title\".",
       );
     } catch (e, s) {
-      logger.w("TmdbDatasource.getPopularMovies", error: e, stackTrace: s);
+      logger.w(
+        "TmdbDatasource.searchMoviesByTitle($title, $page)",
+        error: e,
+        stackTrace: s,
+      );
       throw ServerException(
         detail: "Something went wrong while searching movies.",
       );
