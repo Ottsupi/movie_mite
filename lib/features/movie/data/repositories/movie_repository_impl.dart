@@ -47,6 +47,9 @@ final class MovieRepositoryImpl implements MovieRepository {
     int page,
   ) async {
     try {
+      if (collection == MovieCollection.favorite) {
+        return await getFavoriteMovies();
+      }
       if (page == 1) _movieListStatusController.add(MovieListStatus.initial);
       _movieListStatusController.add(MovieListStatus.loading);
       final models = await _remoteMovieDatasource.getMoviesByCollection(
