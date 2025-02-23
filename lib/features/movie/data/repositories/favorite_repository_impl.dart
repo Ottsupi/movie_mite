@@ -31,8 +31,9 @@ final class FavoriteRepositoryImpl implements FavoriteRepository {
   @override
   Future<Either<Failure, void>> addFavoriteMovie(MovieEntity movie) async {
     try {
+      final favorite = movie.copyWith(isFavorite: true);
       await _favoriteDatasource.addFavoriteMovie(
-        DriftMovieModel.fromEntity(movie),
+        DriftMovieModel.fromEntity(favorite),
       );
       return Right(null);
     } on CacheFailure catch (e) {
