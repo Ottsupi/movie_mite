@@ -113,6 +113,7 @@ class _BrowseCollectionTabState extends State<BrowseCollectionTab> {
       create:
           (context) => MovieRepositoryImpl(
             RepositoryProvider.of<MovieRemoteDatasource>(context),
+            RepositoryProvider.of<FavoriteDatasource>(context),
           ),
       child: MultiBlocProvider(
         providers: [
