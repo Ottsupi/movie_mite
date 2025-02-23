@@ -12,6 +12,7 @@ abstract class MovieRemoteDatasource {
     MovieCollection collection,
     int page,
   );
+  Future<List<TmdbMovieModel>> searchMoviesByTitle(String title, int page);
 }
 
 final class TmdbDatasource implements MovieRemoteDatasource {
@@ -85,6 +86,31 @@ final class TmdbDatasource implements MovieRemoteDatasource {
       throw ServerException(
         detail:
             "Something went wrong while fetching ${collection.name} movies.",
+      );
+    }
+  }
+
+  @override
+  Future<List<TmdbMovieModel>> searchMoviesByTitle(
+    String title,
+    int page,
+  ) async {
+    try {
+      final response = await dio.get(
+        TmdbApiUrls.searchMovieByTitle,
+        queryParameters: {'query': title, 'page': page},
+      );
+      final results = response.data['results'] as List;
+      return results.map((e) => TmdbMovieModel.fromJson(e)).toList();
+    } on DioException catch (e) {
+      throw ServerException(
+        error: e,
+        detail: e.message ?? "Could not search for movies entitled \"$title\".",
+      );
+    } catch (e, s) {
+      logger.w("TmdbDatasource.getPopularMovies", error: e, stackTrace: s);
+      throw ServerException(
+        detail: "Something went wrong while searching movies.",
       );
     }
   }
