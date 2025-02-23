@@ -9,7 +9,7 @@ final class SearchMoviesState extends Equatable {
   final Failure? failure;
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [page, title, failure];
 
   factory SearchMoviesState.initial() {
     return SearchMoviesState(page: 0, title: '');
