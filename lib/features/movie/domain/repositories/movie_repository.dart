@@ -18,6 +18,9 @@ abstract class MovieRepository {
     int page,
   );
 
+  ///
+  Future<Either<Failure, List<MovieEntity>>> getFavoriteMovies();
+
   /// Get a list of movies with a title that matches the string
   Future<Either<Failure, List<MovieEntity>>> searchMovieByTitle(
     String title,
