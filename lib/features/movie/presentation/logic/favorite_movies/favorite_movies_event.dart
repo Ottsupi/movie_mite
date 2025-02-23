@@ -17,3 +17,12 @@ final class AddFavoriteMovieEvent extends FavoriteMoviesEvent {
   @override
   List<Object> get props => [movie];
 }
+
+final class RemoveFavoriteMovieEvent extends FavoriteMoviesEvent {
+  final MovieEntity movie;
+
+  const RemoveFavoriteMovieEvent(this.movie);
+
+  @override
+  List<Object> get props => [movie];
+}

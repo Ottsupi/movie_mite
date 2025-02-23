@@ -7,6 +7,7 @@ import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 import 'package:movie_mite/features/movie/domain/repositories/favorite_repository.dart';
 import 'package:movie_mite/features/movie/domain/use_cases/add_favorite_movie.dart';
 import 'package:movie_mite/features/movie/domain/use_cases/get_favorite_movies.dart';
+import 'package:movie_mite/features/movie/domain/use_cases/remove_favorite_movie.dart';
 
 part 'favorite_movies_event.dart';
 part 'favorite_movies_state.dart';
@@ -20,6 +21,7 @@ class FavoriteMoviesBloc
     : super(FavoriteMoviesInitial()) {
     on<FetchFavoriteMovies>(_onFetchFavoriteMovies);
     on<AddFavoriteMovieEvent>(_onAddFavoritMovie);
+    on<RemoveFavoriteMovieEvent>(_onRemoveFavoritMovie);
   }
 
   _onFetchFavoriteMovies(
@@ -52,6 +54,19 @@ class FavoriteMoviesBloc
     final params = AddFavoriteMovieParams(event.movie);
     final result = await AddFavoriteMovie(_favoriteRepository).call(params);
     _logger.d('AddFavoriteMovie returned: ${result.runtimeType}');
+    result.fold(
+      (failure) => emit(FavoriteMoviesFailed(failure)),
+      (movie) => emit(FavoriteMoviesLoaded()),
+    );
+  }
+
+  _onRemoveFavoritMovie(
+    RemoveFavoriteMovieEvent event,
+    Emitter<FavoriteMoviesState> emit,
+  ) async {
+    emit(FavoriteMoviesLoading());
+    final params = RemoveFavoriteMovieParams(event.movie);
+    final result = await RemoveFavoriteMovie(_favoriteRepository).call(params);
     result.fold(
       (failure) => emit(FavoriteMoviesFailed(failure)),
       (movie) => emit(FavoriteMoviesLoaded()),
