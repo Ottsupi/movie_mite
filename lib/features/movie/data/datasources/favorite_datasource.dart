@@ -47,7 +47,8 @@ final class FavoriteDatasourceImpl implements FavoriteDatasource {
   Future<void> removeFavoriteMovieById(int id) async {
     try {
       await db.delete(db.driftMovieTable)
-        ..where((movie) => movie.id.equals(id));
+        ..where((movie) => movie.id.equals(id))
+        ..go();
     } on Exception catch (e) {
       throw CacheException(detail: 'Could not remove favorite movie', error: e);
     }
