@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:movie_mite/core/resources/exceptions.dart';
 import 'package:movie_mite/core/resources/failures.dart';
+import 'package:movie_mite/features/movie/data/datasources/favorite_datasource.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collection_enums.dart';
@@ -12,9 +13,11 @@ import 'package:movie_mite/features/movie/domain/repositories/enums/movie_list_s
 import 'package:movie_mite/features/movie/domain/repositories/movie_repository.dart';
 
 final class MovieRepositoryImpl implements MovieRepository {
-  MovieRepositoryImpl(this._remoteMovieDatasource);
+  MovieRepositoryImpl(this._remoteMovieDatasource, this._favoriteDatasource);
 
   final MovieRemoteDatasource _remoteMovieDatasource;
+  final FavoriteDatasource _favoriteDatasource;
+
   final _movieListStatusController =
       StreamController<MovieListStatus>.broadcast();
   final _movieListStreamController =
@@ -57,6 +60,21 @@ final class MovieRepositoryImpl implements MovieRepository {
     } on ServerException catch (e) {
       _movieListStatusController.add(MovieListStatus.error);
       return Left(ServerFailure(detail: e.detail));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<MovieEntity>>> getFavoriteMovies() async {
+    try {
+      _movieListStatusController.add(MovieListStatus.initial);
+      _movieListStatusController.add(MovieListStatus.loading);
+      final result = await _favoriteDatasource.getFavoriteMovies();
+      final entities = result.map((e) => e.toEntity()).toList();
+      _movieListStreamController.add(entities);
+      _movieListStatusController.add(MovieListStatus.cacheLoaded);
+      return Right(entities);
+    } on CacheFailure catch (e) {
+      return Left(CacheFailure(detail: e.detail));
     }
   }
 
