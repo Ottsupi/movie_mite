@@ -9,4 +9,14 @@ final class TmdbApiUrls {
   static const String upcomingMovies = "$baseUrl/3/movie/upcoming";
 
   static const String searchMovieByTitle = "$baseUrl/3/search/movie";
+
+  // Images
+  static const String posterUrl = "https://image.tmdb.org/t/p/w342";
+  static const String backdropUrl = "https://image.tmdb.org/t/p/w780";
+}
+
+final class TmdbImageUrls {
+  static const String baseUrl = "https://image.tmdb.org";
+  static const String poster = "$baseUrl/t/p/w342";
+  static const String backdrop = "$baseUrl/t/p/w780";
 }
