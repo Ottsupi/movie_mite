@@ -80,6 +80,7 @@ final class TmdbMovieModel extends Equatable {
       isAdult: this.adult ?? false,
       isCached: false,
       isFavorite: false,
+      releaseDate: this.releaseDate ?? null,
       rating: voteAverage ?? Decimal.zero,
       voteCount: voteCount ?? 0,
       genres: [],
@@ -90,6 +91,7 @@ final class TmdbMovieModel extends Equatable {
       posterPath: this.posterPath ?? '',
       source: 'tmdb',
       sourceId: '$id',
+      title: this.title ?? '',
     );
   }
 
