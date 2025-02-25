@@ -2,6 +2,14 @@ part of 'browse_movies_bloc.dart';
 
 enum BrowseMoviesStatus { initial, loading, loaded, empty, failed }
 
+extension BrowseMoviesStatusIsX on BrowseMoviesStatus {
+  bool get isInitial => this == BrowseMoviesStatus.initial;
+  bool get isLoading => this == BrowseMoviesStatus.loading;
+  bool get isLoaded => this == BrowseMoviesStatus.loaded;
+  bool get isEmpty => this == BrowseMoviesStatus.empty;
+  bool get isFailed => this == BrowseMoviesStatus.failed;
+}
+
 final class BrowseMoviesState extends Equatable {
   const BrowseMoviesState({
     required this.page,

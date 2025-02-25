@@ -228,7 +228,7 @@ class BrowseMoviesEndBuilder extends StatelessWidget {
                   ],
                 );
               }
-              if (state.status == BrowseMoviesStatus.failed) {
+              if (state.status.isFailed) {
                 return Column(
                   children: [
                     Text(
