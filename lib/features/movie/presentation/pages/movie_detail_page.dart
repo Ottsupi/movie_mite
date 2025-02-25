@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_mite/core/constants/tmdb_api_urls.dart';
 import 'package:movie_mite/features/movie/data/datasources/favorite_datasource.dart';
 import 'package:movie_mite/features/movie/data/repositories/favorite_repository_impl.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
@@ -89,8 +91,15 @@ class MovieBackdropBuilder extends StatelessWidget {
         child: const Icon(Icons.image, color: Colors.grey, size: 48.0),
       );
     }
-    return Image.network(
-      'https://image.tmdb.org/t/p/w780${movie.backdropPath}',
+    return CachedNetworkImage(
+      imageUrl: '${TmdbImageUrls.backdrop}${movie.backdropPath}',
+      errorWidget: (context, url, error) {
+        return Icon(
+          Icons.image,
+          color: Theme.of(context).colorScheme.error,
+          size: 48.0,
+        );
+      },
     );
   }
 }

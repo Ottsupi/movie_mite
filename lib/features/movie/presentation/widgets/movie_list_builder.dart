@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mite/core/constants/tmdb_api_urls.dart';
@@ -106,8 +107,15 @@ class MovieCardImageBuilder extends StatelessWidget {
     if (movie.posterPath.isEmpty) {
       return const Icon(Icons.image, color: Colors.grey, size: 48.0);
     }
-    return Image.network(
-      '${TmdbImageUrls.poster}${movie.posterPath}',
+    return CachedNetworkImage(
+      imageUrl: '${TmdbImageUrls.poster}${movie.posterPath}',
+      errorWidget: (context, url, error) {
+        return Icon(
+          Icons.image,
+          color: Theme.of(context).colorScheme.error,
+          size: 48.0,
+        );
+      },
       fit: BoxFit.cover,
     );
   }
