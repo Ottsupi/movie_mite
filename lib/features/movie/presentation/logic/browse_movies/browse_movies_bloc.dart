@@ -27,6 +27,7 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
     FetchMoviesByCollection event,
     Emitter<BrowseMoviesState> emit,
   ) async {
+    emit(state.copyWith(status: BrowseMoviesStatus.loading));
     final params = GetMoviesByCollectionParams(
       collection: event.collection,
       page: event.page,
@@ -34,16 +35,25 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
     final result = await GetMoviesByCollection(_movieRepository).call(params);
     result.fold(
       (failure) {
-        emit(state.copyWith(page: event.page - 1, failure: failure));
-      },
-      (movies) {
         emit(
           state.copyWith(
-            page: event.page,
-            collection: event.collection,
-            failure: null,
+            page: event.page - 1,
+            status: BrowseMoviesStatus.failed,
+            failure: failure,
           ),
         );
+      },
+      (movies) {
+        BrowseMoviesState newState = state.copyWith(
+          page: event.page,
+          collection: event.collection,
+          status: BrowseMoviesStatus.loaded,
+          failure: null,
+        );
+        if (movies.isEmpty) {
+          newState = newState.copyWith(status: BrowseMoviesStatus.empty);
+        }
+        emit(newState);
       },
     );
   }
