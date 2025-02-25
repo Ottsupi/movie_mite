@@ -77,6 +77,7 @@ class SearchMoviesBloc extends Bloc<SearchMoviesEvent, SearchMoviesState> {
   }
 
   _onRefresh(RefreshMovies event, Emitter<SearchMoviesState> emit) {
+    if (state.title.isEmpty) return;
     add(FetchMovieByTitle(page: 1, title: state.title));
   }
 }
