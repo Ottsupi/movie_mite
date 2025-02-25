@@ -47,14 +47,7 @@ class MovieDetailSreen extends StatelessWidget {
       appBar: AppBar(title: Text('Movie Details')),
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Image.network(
-                'https://image.tmdb.org/t/p/w780${movie.backdropPath}',
-              ),
-            ),
-          ),
+          SliverToBoxAdapter(child: MovieBackdrop(movie: movie)),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -63,6 +56,41 @@ class MovieDetailSreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class MovieBackdrop extends StatelessWidget {
+  const MovieBackdrop({super.key, required this.movie});
+
+  final MovieEntity movie;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black87,
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: MovieBackdropBuilder(movie: movie),
+      ),
+    );
+  }
+}
+
+class MovieBackdropBuilder extends StatelessWidget {
+  const MovieBackdropBuilder({super.key, required this.movie});
+
+  final MovieEntity movie;
+
+  @override
+  Widget build(BuildContext context) {
+    if (movie.backdropPath.isEmpty) {
+      return Center(
+        child: const Icon(Icons.image, color: Colors.grey, size: 48.0),
+      );
+    }
+    return Image.network(
+      'https://image.tmdb.org/t/p/w780${movie.backdropPath}',
     );
   }
 }
