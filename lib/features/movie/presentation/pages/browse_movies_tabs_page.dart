@@ -194,8 +194,50 @@ class _BrowseCollectionState extends State<BrowseCollection> {
       },
       child: CustomScrollView(
         controller: _scrollController,
-        slivers: [MovieListBuilder()],
+        slivers: [
+          MovieListBuilder(),
+          BrowseMoviesEndBuilder(widget.collection),
+        ],
       ),
+    );
+  }
+}
+
+class BrowseMoviesEndBuilder extends StatelessWidget {
+  const BrowseMoviesEndBuilder(this.collection, {super.key});
+
+  final MovieCollection collection;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<BrowseMoviesBloc, BrowseMoviesState>(
+      builder: (context, state) {
+        final maxPages = BrowseMoviesBloc.maxPages;
+        if (state.page == maxPages) {
+          final maxResults = maxPages * BrowseMoviesBloc.itemsPerPage;
+          return SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32.0),
+              child: Center(
+                child: Column(
+                  children: [
+                    Text(
+                      "Top ${maxResults} ${collection.name} Movies displayed",
+                    ),
+                    Text("Please choose another collection"),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+        return SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32.0),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+        );
+      },
     );
   }
 }
