@@ -191,10 +191,14 @@ class _BrowseCollectionState extends State<BrowseCollection> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () {
+        context.read<BrowseMoviesBloc>().add(
+          FetchMoviesByCollection(page: 1, collection: widget.collection),
+        );
         return Future.delayed(Durations.extralong4);
       },
       child: CustomScrollView(
         controller: _scrollController,
+        physics: AlwaysScrollableScrollPhysics(),
         slivers: [
           MovieListBuilder(),
           BrowseMoviesEndBuilder(widget.collection),

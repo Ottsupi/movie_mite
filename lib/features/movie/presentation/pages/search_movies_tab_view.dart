@@ -103,6 +103,7 @@ class _SearchResultsState extends State<SearchResults> {
       },
       child: CustomScrollView(
         controller: _scrollController,
+        physics: AlwaysScrollableScrollPhysics(),
         slivers: [SearchBox(), MovieListBuilder(), SearchMoviesEndBuilder()],
       ),
     );
