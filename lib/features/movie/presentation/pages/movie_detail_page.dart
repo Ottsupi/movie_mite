@@ -87,8 +87,41 @@ class MovieDetailSummary extends StatelessWidget {
         SizedBox(height: 16),
         MovieRating(movie: movie),
         SizedBox(height: 4),
-        FavoriteToggle(movie),
+        FavoriteToggleBuilder(movie: movie),
       ],
+    );
+  }
+}
+
+class FavoriteToggleBuilder extends StatelessWidget {
+  const FavoriteToggleBuilder({super.key, required this.movie});
+
+  final MovieEntity movie;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<FavoriteMoviesBloc, FavoriteMoviesState>(
+      listener: (context, state) {
+        switch (state) {
+          case FavoriteMoviesInitial():
+            break;
+          case FavoriteMoviesSuccess():
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.detail),
+                duration: Durations.extralong4,
+              ),
+            );
+          case FavoriteMoviesFailed():
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.failure.detail),
+                duration: Durations.extralong4,
+              ),
+            );
+        }
+      },
+      child: FavoriteToggle(movie),
     );
   }
 }

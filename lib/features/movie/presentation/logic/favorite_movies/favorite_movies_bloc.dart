@@ -26,13 +26,15 @@ class FavoriteMoviesBloc
     AddFavoriteMovieEvent event,
     Emitter<FavoriteMoviesState> emit,
   ) async {
-    _logger.d('Add to favorites: ${event.movie.originalTitle}');
     final params = AddFavoriteMovieParams(event.movie);
     final result = await AddFavoriteMovie(_favoriteRepository).call(params);
-    _logger.d('AddFavoriteMovie returned: ${result.runtimeType}');
     result.fold(
-      (failure) => emit(FavoriteMoviesFailed(failure)),
-      (movie) => emit(FavoriteMoviesSuccess("Added to favorites")),
+      (failure) {
+        emit(FavoriteMoviesFailed(failure));
+      },
+      (movie) {
+        emit(FavoriteMoviesSuccess("Added to favorites"));
+      },
     );
   }
 
@@ -43,8 +45,12 @@ class FavoriteMoviesBloc
     final params = RemoveFavoriteMovieParams(event.movie);
     final result = await RemoveFavoriteMovie(_favoriteRepository).call(params);
     result.fold(
-      (failure) => emit(FavoriteMoviesFailed(failure)),
-      (movie) => emit(FavoriteMoviesSuccess("Removed from favorites")),
+      (failure) {
+        emit(FavoriteMoviesFailed(failure));
+      },
+      (movie) {
+        emit(FavoriteMoviesSuccess("Removed from favorites"));
+      },
     );
   }
 }
