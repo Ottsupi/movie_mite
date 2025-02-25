@@ -10,13 +10,11 @@ import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collec
 import 'package:movie_mite/features/movie/domain/repositories/favorite_repository.dart';
 import 'package:movie_mite/features/movie/domain/repositories/movie_repository.dart';
 import 'package:movie_mite/features/movie/presentation/logic/browse_movies/browse_movies_bloc.dart';
-import 'package:movie_mite/features/movie/presentation/logic/favorite_movies/favorite_movies_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list_status/movie_list_status_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/pages/favorite_movies_tab_view.dart';
 import 'package:movie_mite/features/movie/presentation/pages/search_movies_tab_view.dart';
 import 'package:movie_mite/features/movie/presentation/widgets/movie_list_builder.dart';
-import 'package:movie_mite/features/movie/presentation/widgets/movie_list_status_builder.dart';
 import 'package:rxdart/rxdart.dart';
 
 class BrowseMoviesTabsPage extends StatelessWidget {
@@ -196,7 +194,7 @@ class _BrowseCollectionState extends State<BrowseCollection> {
       },
       child: CustomScrollView(
         controller: _scrollController,
-        slivers: [MovieListBuilder(), MovieListStatusBuilder()],
+        slivers: [MovieListBuilder()],
       ),
     );
   }
