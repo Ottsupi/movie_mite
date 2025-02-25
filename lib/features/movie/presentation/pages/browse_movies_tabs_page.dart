@@ -210,51 +210,39 @@ class BrowseMoviesEndBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BrowseMoviesBloc, BrowseMoviesState>(
-      builder: (context, state) {
-        final maxPages = BrowseMoviesBloc.maxPages;
-        if (state.page == maxPages) {
-          final maxResults = maxPages * BrowseMoviesBloc.itemsPerPage;
-          return SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32.0),
-              child: Center(
-                child: Column(
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32.0),
+        child: Center(
+          child: BlocBuilder<BrowseMoviesBloc, BrowseMoviesState>(
+            builder: (context, state) {
+              final maxPages = BrowseMoviesBloc.maxPages;
+              if (state.page == maxPages) {
+                final maxResults = maxPages * BrowseMoviesBloc.itemsPerPage;
+                return Column(
                   children: [
                     Text(
                       "Top ${maxResults} ${collection.name} Movies displayed",
                     ),
                     Text("Please choose another collection"),
                   ],
-                ),
-              ),
-            ),
-          );
-        }
-        if (state.status == BrowseMoviesStatus.failed) {
-          return SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32.0),
-              child: Center(
-                child: Column(
+                );
+              }
+              if (state.status == BrowseMoviesStatus.failed) {
+                return Column(
                   children: [
                     Text(
                       state.failure?.detail ??
                           "Something went wrong, please try again later.",
                     ),
                   ],
-                ),
-              ),
-            ),
-          );
-        }
-        return SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32.0),
-            child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              return CircularProgressIndicator();
+            },
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
