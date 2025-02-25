@@ -99,20 +99,24 @@ final class MovieRepositoryImpl implements MovieRepository {
     String title,
     int page,
   ) async {
+    if (page == 1) _movieListStatusController.add(MovieListStatus.initial);
+
+    _movieListStatusController.add(MovieListStatus.loading);
+    List<TmdbMovieModel> models = [];
     try {
-      if (page == 1) _movieListStatusController.add(MovieListStatus.initial);
-      _movieListStatusController.add(MovieListStatus.loading);
-      final result = await _remoteMovieDatasource.searchMoviesByTitle(
-        title,
-        page,
-      );
-      final entities = result.map((e) => e.toEntity()).toList();
-      _movieListStreamController.add(entities);
-      _movieListStatusController.add(MovieListStatus.networkLoaded);
-      return Right(entities);
+      models = await _remoteMovieDatasource.searchMoviesByTitle(title, page);
     } on ServerException catch (e) {
       return Left(ServerFailure.fromServerException(e));
     }
+
+    final entities = models.map((e) => e.toEntity()).toList();
+
+    final injection = await _injectFavorites(entities);
+    final finalList = injection.fold((failure) => entities, (movies) => movies);
+
+    _movieListStreamController.add(finalList);
+    _movieListStatusController.add(MovieListStatus.networkLoaded);
+    return Right(finalList);
   }
 
   @override
