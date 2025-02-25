@@ -9,9 +9,14 @@ sealed class FavoriteMoviesState extends Equatable {
 
 final class FavoriteMoviesInitial extends FavoriteMoviesState {}
 
-final class FavoriteMoviesLoading extends FavoriteMoviesState {}
+final class FavoriteMoviesSuccess extends FavoriteMoviesState {
+  final String detail;
 
-final class FavoriteMoviesLoaded extends FavoriteMoviesState {}
+  const FavoriteMoviesSuccess(this.detail);
+
+  @override
+  List<Object> get props => [detail];
+}
 
 final class FavoriteMoviesFailed extends FavoriteMoviesState {
   final Failure failure;
@@ -21,5 +26,3 @@ final class FavoriteMoviesFailed extends FavoriteMoviesState {
   @override
   List<Object> get props => [failure];
 }
-
-final class FavoriteMoviesEmpty extends FavoriteMoviesState {}
