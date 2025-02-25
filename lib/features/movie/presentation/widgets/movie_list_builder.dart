@@ -1,23 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mite/core/constants/tmdb_api_urls.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
-import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/pages/movie_detail_page.dart';
-
-class MovieListBuilder extends StatelessWidget {
-  const MovieListBuilder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<MovieListBloc, MovieListState>(
-      builder: (context, state) {
-        return MoviesList(movies: state.movies, showFavoriteIndicator: false);
-      },
-    );
-  }
-}
 
 class MoviesList extends StatelessWidget {
   const MoviesList({

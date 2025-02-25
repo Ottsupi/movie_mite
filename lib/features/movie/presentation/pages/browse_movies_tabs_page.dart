@@ -200,7 +200,7 @@ class _BrowseCollectionState extends State<BrowseCollection> {
         controller: _scrollController,
         physics: AlwaysScrollableScrollPhysics(),
         slivers: [
-          MovieListBuilder(),
+          BrowseMovieListBuilder(),
           BrowseMoviesEndBuilder(widget.collection),
         ],
       ),
@@ -241,6 +241,19 @@ class BrowseMoviesEndBuilder extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class BrowseMovieListBuilder extends StatelessWidget {
+  const BrowseMovieListBuilder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<MovieListBloc, MovieListState>(
+      builder: (context, state) {
+        return MoviesList(movies: state.movies, showFavoriteIndicator: true);
+      },
     );
   }
 }

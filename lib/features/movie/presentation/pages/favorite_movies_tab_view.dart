@@ -75,8 +75,21 @@ class FavoriteMovies extends StatelessWidget {
         return Future.delayed(Durations.extralong4);
       },
       child: CustomScrollView(
-        slivers: [MovieListBuilder(), EmptyFavoriteMoviesBuilder()],
+        slivers: [FavoriteMovieListBuilder(), EmptyFavoriteMoviesBuilder()],
       ),
+    );
+  }
+}
+
+class FavoriteMovieListBuilder extends StatelessWidget {
+  const FavoriteMovieListBuilder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<MovieListBloc, MovieListState>(
+      builder: (context, state) {
+        return MoviesList(movies: state.movies, showFavoriteIndicator: false);
+      },
     );
   }
 }

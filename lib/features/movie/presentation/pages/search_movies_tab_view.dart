@@ -104,8 +104,25 @@ class _SearchResultsState extends State<SearchResults> {
       child: CustomScrollView(
         controller: _scrollController,
         physics: AlwaysScrollableScrollPhysics(),
-        slivers: [SearchBox(), MovieListBuilder(), SearchMoviesEndBuilder()],
+        slivers: [
+          SearchBox(),
+          SearchMovieListBuilder(),
+          SearchMoviesEndBuilder(),
+        ],
       ),
+    );
+  }
+}
+
+class SearchMovieListBuilder extends StatelessWidget {
+  const SearchMovieListBuilder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<MovieListBloc, MovieListState>(
+      builder: (context, state) {
+        return MoviesList(movies: state.movies, showFavoriteIndicator: true);
+      },
     );
   }
 }
