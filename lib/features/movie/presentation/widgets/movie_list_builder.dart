@@ -39,6 +39,7 @@ class MoviesList extends StatelessWidget {
         itemBuilder: (context, index) {
           return MovieCard(
             movies[index],
+            showFavoriteIndicator: true,
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -54,11 +55,19 @@ class MoviesList extends StatelessWidget {
 }
 
 class MovieCard extends StatelessWidget {
-  const MovieCard(this.movie, {super.key, this.onTap, this.onDoubleTap});
+  const MovieCard(
+    this.movie, {
+    super.key,
+    this.onTap,
+    this.onDoubleTap,
+    required this.showFavoriteIndicator,
+  });
 
   final MovieEntity movie;
   final void Function()? onTap;
   final void Function()? onDoubleTap;
+
+  final bool showFavoriteIndicator;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +99,34 @@ class MovieCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
+            FavoriteIndicator(movie.isFavorite),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class FavoriteIndicator extends StatelessWidget {
+  const FavoriteIndicator(this.isFavorite, {super.key});
+
+  final bool isFavorite;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!isFavorite) return SizedBox.shrink();
+    return Positioned(
+      top: 8,
+      right: 8,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4.0),
+          color: Theme.of(context).colorScheme.surface,
+        ),
+        padding: EdgeInsets.all(4.0),
+        child: Icon(
+          Icons.favorite,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );
