@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:movie_mite/features/movie/data/datasources/favorite_datasource.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
 import 'package:movie_mite/features/movie/data/repositories/movie_repository_impl.dart';
@@ -106,8 +108,39 @@ class _SearchResultsState extends State<SearchResults> {
   }
 }
 
-class SearchBox extends StatelessWidget {
+class SearchBox extends StatefulWidget {
   const SearchBox({super.key});
+
+  @override
+  State<SearchBox> createState() => _SearchBoxState();
+}
+
+class _SearchBoxState extends State<SearchBox> {
+  final _searchSubject = PublishSubject<String>();
+  final _textController = TextEditingController();
+  final logger = GetIt.I<Logger>();
+
+  String _prevText = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    _textController.addListener(() {
+      _searchSubject.add(_textController.text);
+    });
+
+    _searchSubject.debounceTime(Durations.long1).listen((text) {
+      if (text.isNotEmpty) {
+        if (_prevText != text) {
+          context.read<SearchMoviesBloc>().add(
+            FetchMovieByTitle(page: 1, title: text),
+          );
+          _prevText = text;
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,15 +148,14 @@ class SearchBox extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: TextFormField(
+          controller: _textController,
           decoration: InputDecoration(hintText: "Search for movie title..."),
           onTapOutside: (event) {
             FocusScope.of(context).unfocus();
           },
           textInputAction: TextInputAction.search,
           onFieldSubmitted: (value) {
-            BlocProvider.of<SearchMoviesBloc>(
-              context,
-            ).add(FetchMovieByTitle(page: 1, title: value));
+            FocusScope.of(context).unfocus();
           },
         ),
       ),
