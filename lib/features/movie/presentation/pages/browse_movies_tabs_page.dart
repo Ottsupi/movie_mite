@@ -39,13 +39,7 @@ class BrowseMoviesTabsPage extends StatelessWidget {
               ),
         ),
       ],
-      child: BlocProvider(
-        create:
-            (context) => FavoriteMoviesBloc(
-              RepositoryProvider.of<FavoriteRepository>(context),
-            ),
-        child: BrowseMoviesTabsScreen(),
-      ),
+      child: BrowseMoviesTabsScreen(),
     );
   }
 }
