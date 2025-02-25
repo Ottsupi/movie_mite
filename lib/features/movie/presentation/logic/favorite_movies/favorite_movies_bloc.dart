@@ -20,8 +20,8 @@ class FavoriteMoviesBloc
   FavoriteMoviesBloc(this._favoriteRepository)
     : super(FavoriteMoviesInitial()) {
     on<FetchFavoriteMovies>(_onFetchFavoriteMovies);
-    on<AddFavoriteMovieEvent>(_onAddFavoritMovie);
-    on<RemoveFavoriteMovieEvent>(_onRemoveFavoritMovie);
+    on<AddFavoriteMovieEvent>(_onAddFavoriteMovie);
+    on<RemoveFavoriteMovieEvent>(_onRemoveFavoriteMovie);
   }
 
   _onFetchFavoriteMovies(
@@ -45,7 +45,7 @@ class FavoriteMoviesBloc
     );
   }
 
-  _onAddFavoritMovie(
+  _onAddFavoriteMovie(
     AddFavoriteMovieEvent event,
     Emitter<FavoriteMoviesState> emit,
   ) async {
@@ -60,7 +60,7 @@ class FavoriteMoviesBloc
     );
   }
 
-  _onRemoveFavoritMovie(
+  _onRemoveFavoriteMovie(
     RemoveFavoriteMovieEvent event,
     Emitter<FavoriteMoviesState> emit,
   ) async {
