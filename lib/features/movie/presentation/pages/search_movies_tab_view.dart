@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:movie_mite/core/presentation/widgets/banner_failure_widget.dart';
 import 'package:movie_mite/features/movie/data/datasources/favorite_datasource.dart';
 import 'package:movie_mite/features/movie/data/datasources/tmdb_datasource.dart';
 import 'package:movie_mite/features/movie/data/repositories/movie_repository_impl.dart';
@@ -170,7 +171,7 @@ class SearchMoviesEndBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 32.0),
         child: Center(
           child: BlocBuilder<SearchMoviesBloc, SearchMoviesState>(
             builder: (context, state) {
@@ -215,10 +216,7 @@ class SearchMoviesEndBuilder extends StatelessWidget {
                     ],
                   );
                 case SearchMoviesStatus.failed:
-                  return Text(
-                    state.failure?.detail ??
-                        "Something went wrong, please try again later.",
-                  );
+                  return BannerFailureWidget(state.failure);
               }
             },
           ),
