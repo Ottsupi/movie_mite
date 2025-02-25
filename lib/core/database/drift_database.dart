@@ -9,6 +9,7 @@ class DriftMovieTable extends Table {
   BoolColumn get isAdult => boolean()();
   BoolColumn get isCached => boolean()();
   BoolColumn get isFavorite => boolean()();
+  DateTimeColumn get releaseDate => dateTime().nullable()();
   RealColumn get rating => real()();
   IntColumn get voteCount => integer()();
   TextColumn get genres => text()();
@@ -19,6 +20,7 @@ class DriftMovieTable extends Table {
   TextColumn get posterPath => text()();
   TextColumn get source => text()();
   TextColumn get sourceId => text()();
+  TextColumn get title => text()();
 }
 
 @DriftDatabase(tables: [DriftMovieTable])

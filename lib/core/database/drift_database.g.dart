@@ -64,6 +64,17 @@ class $DriftMovieTableTable extends DriftMovieTable
       'CHECK ("is_favorite" IN (0, 1))',
     ),
   );
+  static const VerificationMeta _releaseDateMeta = const VerificationMeta(
+    'releaseDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> releaseDate = GeneratedColumn<DateTime>(
+    'release_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _ratingMeta = const VerificationMeta('rating');
   @override
   late final GeneratedColumn<double> rating = GeneratedColumn<double>(
@@ -168,12 +179,22 @@ class $DriftMovieTableTable extends DriftMovieTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
     isAdult,
     isCached,
     isFavorite,
+    releaseDate,
     rating,
     voteCount,
     genres,
@@ -184,6 +205,7 @@ class $DriftMovieTableTable extends DriftMovieTable
     posterPath,
     source,
     sourceId,
+    title,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -223,6 +245,15 @@ class $DriftMovieTableTable extends DriftMovieTable
       );
     } else if (isInserting) {
       context.missing(_isFavoriteMeta);
+    }
+    if (data.containsKey('release_date')) {
+      context.handle(
+        _releaseDateMeta,
+        releaseDate.isAcceptableOrUnknown(
+          data['release_date']!,
+          _releaseDateMeta,
+        ),
+      );
     }
     if (data.containsKey('rating')) {
       context.handle(
@@ -313,6 +344,14 @@ class $DriftMovieTableTable extends DriftMovieTable
     } else if (isInserting) {
       context.missing(_sourceIdMeta);
     }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
     return context;
   }
 
@@ -342,6 +381,10 @@ class $DriftMovieTableTable extends DriftMovieTable
             DriftSqlType.bool,
             data['${effectivePrefix}is_favorite'],
           )!,
+      releaseDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}release_date'],
+      ),
       rating:
           attachedDatabase.typeMapping.read(
             DriftSqlType.double,
@@ -392,6 +435,11 @@ class $DriftMovieTableTable extends DriftMovieTable
             DriftSqlType.string,
             data['${effectivePrefix}source_id'],
           )!,
+      title:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}title'],
+          )!,
     );
   }
 
@@ -407,6 +455,7 @@ class DriftMovieTableData extends DataClass
   final bool isAdult;
   final bool isCached;
   final bool isFavorite;
+  final DateTime? releaseDate;
   final double rating;
   final int voteCount;
   final String genres;
@@ -417,11 +466,13 @@ class DriftMovieTableData extends DataClass
   final String posterPath;
   final String source;
   final String sourceId;
+  final String title;
   const DriftMovieTableData({
     required this.id,
     required this.isAdult,
     required this.isCached,
     required this.isFavorite,
+    this.releaseDate,
     required this.rating,
     required this.voteCount,
     required this.genres,
@@ -432,6 +483,7 @@ class DriftMovieTableData extends DataClass
     required this.posterPath,
     required this.source,
     required this.sourceId,
+    required this.title,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -440,6 +492,9 @@ class DriftMovieTableData extends DataClass
     map['is_adult'] = Variable<bool>(isAdult);
     map['is_cached'] = Variable<bool>(isCached);
     map['is_favorite'] = Variable<bool>(isFavorite);
+    if (!nullToAbsent || releaseDate != null) {
+      map['release_date'] = Variable<DateTime>(releaseDate);
+    }
     map['rating'] = Variable<double>(rating);
     map['vote_count'] = Variable<int>(voteCount);
     map['genres'] = Variable<String>(genres);
@@ -450,6 +505,7 @@ class DriftMovieTableData extends DataClass
     map['poster_path'] = Variable<String>(posterPath);
     map['source'] = Variable<String>(source);
     map['source_id'] = Variable<String>(sourceId);
+    map['title'] = Variable<String>(title);
     return map;
   }
 
@@ -459,6 +515,10 @@ class DriftMovieTableData extends DataClass
       isAdult: Value(isAdult),
       isCached: Value(isCached),
       isFavorite: Value(isFavorite),
+      releaseDate:
+          releaseDate == null && nullToAbsent
+              ? const Value.absent()
+              : Value(releaseDate),
       rating: Value(rating),
       voteCount: Value(voteCount),
       genres: Value(genres),
@@ -469,6 +529,7 @@ class DriftMovieTableData extends DataClass
       posterPath: Value(posterPath),
       source: Value(source),
       sourceId: Value(sourceId),
+      title: Value(title),
     );
   }
 
@@ -482,6 +543,7 @@ class DriftMovieTableData extends DataClass
       isAdult: serializer.fromJson<bool>(json['isAdult']),
       isCached: serializer.fromJson<bool>(json['isCached']),
       isFavorite: serializer.fromJson<bool>(json['isFavorite']),
+      releaseDate: serializer.fromJson<DateTime?>(json['releaseDate']),
       rating: serializer.fromJson<double>(json['rating']),
       voteCount: serializer.fromJson<int>(json['voteCount']),
       genres: serializer.fromJson<String>(json['genres']),
@@ -492,6 +554,7 @@ class DriftMovieTableData extends DataClass
       posterPath: serializer.fromJson<String>(json['posterPath']),
       source: serializer.fromJson<String>(json['source']),
       sourceId: serializer.fromJson<String>(json['sourceId']),
+      title: serializer.fromJson<String>(json['title']),
     );
   }
   @override
@@ -502,6 +565,7 @@ class DriftMovieTableData extends DataClass
       'isAdult': serializer.toJson<bool>(isAdult),
       'isCached': serializer.toJson<bool>(isCached),
       'isFavorite': serializer.toJson<bool>(isFavorite),
+      'releaseDate': serializer.toJson<DateTime?>(releaseDate),
       'rating': serializer.toJson<double>(rating),
       'voteCount': serializer.toJson<int>(voteCount),
       'genres': serializer.toJson<String>(genres),
@@ -512,6 +576,7 @@ class DriftMovieTableData extends DataClass
       'posterPath': serializer.toJson<String>(posterPath),
       'source': serializer.toJson<String>(source),
       'sourceId': serializer.toJson<String>(sourceId),
+      'title': serializer.toJson<String>(title),
     };
   }
 
@@ -520,6 +585,7 @@ class DriftMovieTableData extends DataClass
     bool? isAdult,
     bool? isCached,
     bool? isFavorite,
+    Value<DateTime?> releaseDate = const Value.absent(),
     double? rating,
     int? voteCount,
     String? genres,
@@ -530,11 +596,13 @@ class DriftMovieTableData extends DataClass
     String? posterPath,
     String? source,
     String? sourceId,
+    String? title,
   }) => DriftMovieTableData(
     id: id ?? this.id,
     isAdult: isAdult ?? this.isAdult,
     isCached: isCached ?? this.isCached,
     isFavorite: isFavorite ?? this.isFavorite,
+    releaseDate: releaseDate.present ? releaseDate.value : this.releaseDate,
     rating: rating ?? this.rating,
     voteCount: voteCount ?? this.voteCount,
     genres: genres ?? this.genres,
@@ -545,6 +613,7 @@ class DriftMovieTableData extends DataClass
     posterPath: posterPath ?? this.posterPath,
     source: source ?? this.source,
     sourceId: sourceId ?? this.sourceId,
+    title: title ?? this.title,
   );
   DriftMovieTableData copyWithCompanion(DriftMovieTableCompanion data) {
     return DriftMovieTableData(
@@ -553,6 +622,8 @@ class DriftMovieTableData extends DataClass
       isCached: data.isCached.present ? data.isCached.value : this.isCached,
       isFavorite:
           data.isFavorite.present ? data.isFavorite.value : this.isFavorite,
+      releaseDate:
+          data.releaseDate.present ? data.releaseDate.value : this.releaseDate,
       rating: data.rating.present ? data.rating.value : this.rating,
       voteCount: data.voteCount.present ? data.voteCount.value : this.voteCount,
       genres: data.genres.present ? data.genres.value : this.genres,
@@ -573,6 +644,7 @@ class DriftMovieTableData extends DataClass
           data.posterPath.present ? data.posterPath.value : this.posterPath,
       source: data.source.present ? data.source.value : this.source,
       sourceId: data.sourceId.present ? data.sourceId.value : this.sourceId,
+      title: data.title.present ? data.title.value : this.title,
     );
   }
 
@@ -583,6 +655,7 @@ class DriftMovieTableData extends DataClass
           ..write('isAdult: $isAdult, ')
           ..write('isCached: $isCached, ')
           ..write('isFavorite: $isFavorite, ')
+          ..write('releaseDate: $releaseDate, ')
           ..write('rating: $rating, ')
           ..write('voteCount: $voteCount, ')
           ..write('genres: $genres, ')
@@ -592,7 +665,8 @@ class DriftMovieTableData extends DataClass
           ..write('overview: $overview, ')
           ..write('posterPath: $posterPath, ')
           ..write('source: $source, ')
-          ..write('sourceId: $sourceId')
+          ..write('sourceId: $sourceId, ')
+          ..write('title: $title')
           ..write(')'))
         .toString();
   }
@@ -603,6 +677,7 @@ class DriftMovieTableData extends DataClass
     isAdult,
     isCached,
     isFavorite,
+    releaseDate,
     rating,
     voteCount,
     genres,
@@ -613,6 +688,7 @@ class DriftMovieTableData extends DataClass
     posterPath,
     source,
     sourceId,
+    title,
   );
   @override
   bool operator ==(Object other) =>
@@ -622,6 +698,7 @@ class DriftMovieTableData extends DataClass
           other.isAdult == this.isAdult &&
           other.isCached == this.isCached &&
           other.isFavorite == this.isFavorite &&
+          other.releaseDate == this.releaseDate &&
           other.rating == this.rating &&
           other.voteCount == this.voteCount &&
           other.genres == this.genres &&
@@ -631,7 +708,8 @@ class DriftMovieTableData extends DataClass
           other.overview == this.overview &&
           other.posterPath == this.posterPath &&
           other.source == this.source &&
-          other.sourceId == this.sourceId);
+          other.sourceId == this.sourceId &&
+          other.title == this.title);
 }
 
 class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
@@ -639,6 +717,7 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
   final Value<bool> isAdult;
   final Value<bool> isCached;
   final Value<bool> isFavorite;
+  final Value<DateTime?> releaseDate;
   final Value<double> rating;
   final Value<int> voteCount;
   final Value<String> genres;
@@ -649,11 +728,13 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
   final Value<String> posterPath;
   final Value<String> source;
   final Value<String> sourceId;
+  final Value<String> title;
   const DriftMovieTableCompanion({
     this.id = const Value.absent(),
     this.isAdult = const Value.absent(),
     this.isCached = const Value.absent(),
     this.isFavorite = const Value.absent(),
+    this.releaseDate = const Value.absent(),
     this.rating = const Value.absent(),
     this.voteCount = const Value.absent(),
     this.genres = const Value.absent(),
@@ -664,12 +745,14 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
     this.posterPath = const Value.absent(),
     this.source = const Value.absent(),
     this.sourceId = const Value.absent(),
+    this.title = const Value.absent(),
   });
   DriftMovieTableCompanion.insert({
     this.id = const Value.absent(),
     required bool isAdult,
     required bool isCached,
     required bool isFavorite,
+    this.releaseDate = const Value.absent(),
     required double rating,
     required int voteCount,
     required String genres,
@@ -680,6 +763,7 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
     required String posterPath,
     required String source,
     required String sourceId,
+    required String title,
   }) : isAdult = Value(isAdult),
        isCached = Value(isCached),
        isFavorite = Value(isFavorite),
@@ -692,12 +776,14 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
        overview = Value(overview),
        posterPath = Value(posterPath),
        source = Value(source),
-       sourceId = Value(sourceId);
+       sourceId = Value(sourceId),
+       title = Value(title);
   static Insertable<DriftMovieTableData> custom({
     Expression<int>? id,
     Expression<bool>? isAdult,
     Expression<bool>? isCached,
     Expression<bool>? isFavorite,
+    Expression<DateTime>? releaseDate,
     Expression<double>? rating,
     Expression<int>? voteCount,
     Expression<String>? genres,
@@ -708,12 +794,14 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
     Expression<String>? posterPath,
     Expression<String>? source,
     Expression<String>? sourceId,
+    Expression<String>? title,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (isAdult != null) 'is_adult': isAdult,
       if (isCached != null) 'is_cached': isCached,
       if (isFavorite != null) 'is_favorite': isFavorite,
+      if (releaseDate != null) 'release_date': releaseDate,
       if (rating != null) 'rating': rating,
       if (voteCount != null) 'vote_count': voteCount,
       if (genres != null) 'genres': genres,
@@ -724,6 +812,7 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
       if (posterPath != null) 'poster_path': posterPath,
       if (source != null) 'source': source,
       if (sourceId != null) 'source_id': sourceId,
+      if (title != null) 'title': title,
     });
   }
 
@@ -732,6 +821,7 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
     Value<bool>? isAdult,
     Value<bool>? isCached,
     Value<bool>? isFavorite,
+    Value<DateTime?>? releaseDate,
     Value<double>? rating,
     Value<int>? voteCount,
     Value<String>? genres,
@@ -742,12 +832,14 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
     Value<String>? posterPath,
     Value<String>? source,
     Value<String>? sourceId,
+    Value<String>? title,
   }) {
     return DriftMovieTableCompanion(
       id: id ?? this.id,
       isAdult: isAdult ?? this.isAdult,
       isCached: isCached ?? this.isCached,
       isFavorite: isFavorite ?? this.isFavorite,
+      releaseDate: releaseDate ?? this.releaseDate,
       rating: rating ?? this.rating,
       voteCount: voteCount ?? this.voteCount,
       genres: genres ?? this.genres,
@@ -758,6 +850,7 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
       posterPath: posterPath ?? this.posterPath,
       source: source ?? this.source,
       sourceId: sourceId ?? this.sourceId,
+      title: title ?? this.title,
     );
   }
 
@@ -775,6 +868,9 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
     }
     if (isFavorite.present) {
       map['is_favorite'] = Variable<bool>(isFavorite.value);
+    }
+    if (releaseDate.present) {
+      map['release_date'] = Variable<DateTime>(releaseDate.value);
     }
     if (rating.present) {
       map['rating'] = Variable<double>(rating.value);
@@ -806,6 +902,9 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
     if (sourceId.present) {
       map['source_id'] = Variable<String>(sourceId.value);
     }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
     return map;
   }
 
@@ -816,6 +915,7 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
           ..write('isAdult: $isAdult, ')
           ..write('isCached: $isCached, ')
           ..write('isFavorite: $isFavorite, ')
+          ..write('releaseDate: $releaseDate, ')
           ..write('rating: $rating, ')
           ..write('voteCount: $voteCount, ')
           ..write('genres: $genres, ')
@@ -825,7 +925,8 @@ class DriftMovieTableCompanion extends UpdateCompanion<DriftMovieTableData> {
           ..write('overview: $overview, ')
           ..write('posterPath: $posterPath, ')
           ..write('source: $source, ')
-          ..write('sourceId: $sourceId')
+          ..write('sourceId: $sourceId, ')
+          ..write('title: $title')
           ..write(')'))
         .toString();
   }
@@ -850,6 +951,7 @@ typedef $$DriftMovieTableTableCreateCompanionBuilder =
       required bool isAdult,
       required bool isCached,
       required bool isFavorite,
+      Value<DateTime?> releaseDate,
       required double rating,
       required int voteCount,
       required String genres,
@@ -860,6 +962,7 @@ typedef $$DriftMovieTableTableCreateCompanionBuilder =
       required String posterPath,
       required String source,
       required String sourceId,
+      required String title,
     });
 typedef $$DriftMovieTableTableUpdateCompanionBuilder =
     DriftMovieTableCompanion Function({
@@ -867,6 +970,7 @@ typedef $$DriftMovieTableTableUpdateCompanionBuilder =
       Value<bool> isAdult,
       Value<bool> isCached,
       Value<bool> isFavorite,
+      Value<DateTime?> releaseDate,
       Value<double> rating,
       Value<int> voteCount,
       Value<String> genres,
@@ -877,6 +981,7 @@ typedef $$DriftMovieTableTableUpdateCompanionBuilder =
       Value<String> posterPath,
       Value<String> source,
       Value<String> sourceId,
+      Value<String> title,
     });
 
 class $$DriftMovieTableTableFilterComposer
@@ -905,6 +1010,11 @@ class $$DriftMovieTableTableFilterComposer
 
   ColumnFilters<bool> get isFavorite => $composableBuilder(
     column: $table.isFavorite,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get releaseDate => $composableBuilder(
+    column: $table.releaseDate,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -957,6 +1067,11 @@ class $$DriftMovieTableTableFilterComposer
     column: $table.sourceId,
     builder: (column) => ColumnFilters(column),
   );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$DriftMovieTableTableOrderingComposer
@@ -985,6 +1100,11 @@ class $$DriftMovieTableTableOrderingComposer
 
   ColumnOrderings<bool> get isFavorite => $composableBuilder(
     column: $table.isFavorite,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get releaseDate => $composableBuilder(
+    column: $table.releaseDate,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1037,6 +1157,11 @@ class $$DriftMovieTableTableOrderingComposer
     column: $table.sourceId,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$DriftMovieTableTableAnnotationComposer
@@ -1059,6 +1184,11 @@ class $$DriftMovieTableTableAnnotationComposer
 
   GeneratedColumn<bool> get isFavorite => $composableBuilder(
     column: $table.isFavorite,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get releaseDate => $composableBuilder(
+    column: $table.releaseDate,
     builder: (column) => column,
   );
 
@@ -1099,6 +1229,9 @@ class $$DriftMovieTableTableAnnotationComposer
 
   GeneratedColumn<String> get sourceId =>
       $composableBuilder(column: $table.sourceId, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
 }
 
 class $$DriftMovieTableTableTableManager
@@ -1149,6 +1282,7 @@ class $$DriftMovieTableTableTableManager
                 Value<bool> isAdult = const Value.absent(),
                 Value<bool> isCached = const Value.absent(),
                 Value<bool> isFavorite = const Value.absent(),
+                Value<DateTime?> releaseDate = const Value.absent(),
                 Value<double> rating = const Value.absent(),
                 Value<int> voteCount = const Value.absent(),
                 Value<String> genres = const Value.absent(),
@@ -1159,11 +1293,13 @@ class $$DriftMovieTableTableTableManager
                 Value<String> posterPath = const Value.absent(),
                 Value<String> source = const Value.absent(),
                 Value<String> sourceId = const Value.absent(),
+                Value<String> title = const Value.absent(),
               }) => DriftMovieTableCompanion(
                 id: id,
                 isAdult: isAdult,
                 isCached: isCached,
                 isFavorite: isFavorite,
+                releaseDate: releaseDate,
                 rating: rating,
                 voteCount: voteCount,
                 genres: genres,
@@ -1174,6 +1310,7 @@ class $$DriftMovieTableTableTableManager
                 posterPath: posterPath,
                 source: source,
                 sourceId: sourceId,
+                title: title,
               ),
           createCompanionCallback:
               ({
@@ -1181,6 +1318,7 @@ class $$DriftMovieTableTableTableManager
                 required bool isAdult,
                 required bool isCached,
                 required bool isFavorite,
+                Value<DateTime?> releaseDate = const Value.absent(),
                 required double rating,
                 required int voteCount,
                 required String genres,
@@ -1191,11 +1329,13 @@ class $$DriftMovieTableTableTableManager
                 required String posterPath,
                 required String source,
                 required String sourceId,
+                required String title,
               }) => DriftMovieTableCompanion.insert(
                 id: id,
                 isAdult: isAdult,
                 isCached: isCached,
                 isFavorite: isFavorite,
+                releaseDate: releaseDate,
                 rating: rating,
                 voteCount: voteCount,
                 genres: genres,
@@ -1206,6 +1346,7 @@ class $$DriftMovieTableTableTableManager
                 posterPath: posterPath,
                 source: source,
                 sourceId: sourceId,
+                title: title,
               ),
           withReferenceMapper:
               (p0) =>

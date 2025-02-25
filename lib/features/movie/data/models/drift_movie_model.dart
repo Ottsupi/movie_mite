@@ -9,6 +9,7 @@ final class DriftMovieModel {
     required this.isAdult,
     required this.isCached,
     required this.isFavorite,
+    required this.releaseDate,
     required this.rating,
     required this.voteCount,
     required this.genres,
@@ -19,12 +20,14 @@ final class DriftMovieModel {
     required this.posterPath,
     required this.source,
     required this.sourceId,
+    required this.title,
   });
 
   final int? id;
   final bool isAdult;
   final bool isCached;
   final bool isFavorite;
+  final DateTime? releaseDate;
   final double rating;
   final int voteCount;
   final String genres;
@@ -35,12 +38,14 @@ final class DriftMovieModel {
   final String posterPath;
   final String source;
   final String sourceId;
+  final String title;
 
   MovieEntity toEntity() {
     return MovieEntity(
       isAdult: isAdult,
       isCached: isCached,
       isFavorite: isFavorite,
+      releaseDate: releaseDate ?? null,
       rating: Decimal.parse(rating.toString()),
       voteCount: voteCount,
       genres: genres.split(','),
@@ -51,6 +56,7 @@ final class DriftMovieModel {
       posterPath: posterPath,
       source: source,
       sourceId: sourceId,
+      title: title,
     );
   }
 
@@ -60,6 +66,7 @@ final class DriftMovieModel {
       isAdult: entity.isAdult,
       isCached: entity.isCached,
       isFavorite: entity.isFavorite,
+      releaseDate: entity.releaseDate,
       rating: entity.rating.toDouble(),
       voteCount: entity.voteCount,
       genres: entity.genres.join(','),
@@ -70,6 +77,7 @@ final class DriftMovieModel {
       posterPath: entity.posterPath,
       source: entity.source,
       sourceId: entity.sourceId,
+      title: entity.title,
     );
   }
 
@@ -82,6 +90,7 @@ final class DriftMovieModel {
       isAdult: Value(isAdult),
       isCached: Value(isCached),
       isFavorite: Value(isFavorite),
+      releaseDate: Value(releaseDate ?? null),
       rating: Value(rating),
       voteCount: Value(voteCount),
       genres: Value(genres),
@@ -92,6 +101,7 @@ final class DriftMovieModel {
       posterPath: Value(posterPath),
       source: Value(source),
       sourceId: Value(sourceId),
+      title: Value(title),
     );
   }
 
@@ -101,6 +111,7 @@ final class DriftMovieModel {
       isAdult: data.isAdult,
       isCached: data.isCached,
       isFavorite: data.isFavorite,
+      releaseDate: data.releaseDate,
       rating: data.rating.toDouble(),
       voteCount: data.voteCount,
       genres: data.genres,
@@ -111,6 +122,7 @@ final class DriftMovieModel {
       posterPath: data.posterPath,
       source: data.source,
       sourceId: data.sourceId,
+      title: data.title,
     );
   }
 }
