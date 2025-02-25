@@ -37,7 +37,7 @@ final class MovieRepositoryImpl implements MovieRepository {
       return Right(entities);
     } on ServerException catch (e) {
       _movieListStatusController.add(MovieListStatus.error);
-      return Left(ServerFailure(detail: e.detail));
+      return Left(ServerFailure.fromServerException(e));
     }
   }
 
@@ -62,7 +62,7 @@ final class MovieRepositoryImpl implements MovieRepository {
       return Right(entities);
     } on ServerException catch (e) {
       _movieListStatusController.add(MovieListStatus.error);
-      return Left(ServerFailure(detail: e.detail));
+      return Left(ServerFailure.fromServerException(e));
     }
   }
 
@@ -98,7 +98,7 @@ final class MovieRepositoryImpl implements MovieRepository {
       _movieListStatusController.add(MovieListStatus.networkLoaded);
       return Right(entities);
     } on ServerException catch (e) {
-      return Left(ServerFailure(detail: e.detail));
+      return Left(ServerFailure.fromServerException(e));
     }
   }
 
