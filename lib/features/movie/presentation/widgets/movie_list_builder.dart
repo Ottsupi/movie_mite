@@ -13,16 +13,21 @@ class MovieListBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MovieListBloc, MovieListState>(
       builder: (context, state) {
-        return MoviesList(movies: state.movies);
+        return MoviesList(movies: state.movies, showFavoriteIndicator: false);
       },
     );
   }
 }
 
 class MoviesList extends StatelessWidget {
-  const MoviesList({super.key, required this.movies});
+  const MoviesList({
+    super.key,
+    this.showFavoriteIndicator = true,
+    required this.movies,
+  });
 
   final List<MovieEntity> movies;
+  final bool showFavoriteIndicator;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,7 @@ class MoviesList extends StatelessWidget {
         itemBuilder: (context, index) {
           return MovieCard(
             movies[index],
-            showFavoriteIndicator: true,
+            showFavoriteIndicator: showFavoriteIndicator,
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -60,7 +65,7 @@ class MovieCard extends StatelessWidget {
     super.key,
     this.onTap,
     this.onDoubleTap,
-    required this.showFavoriteIndicator,
+    this.showFavoriteIndicator = true,
   });
 
   final MovieEntity movie;
@@ -99,7 +104,7 @@ class MovieCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            FavoriteIndicator(movie.isFavorite),
+            if (showFavoriteIndicator) FavoriteIndicator(movie.isFavorite),
           ],
         ),
       ),
