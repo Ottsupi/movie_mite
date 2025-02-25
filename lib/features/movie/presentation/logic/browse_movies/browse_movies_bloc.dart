@@ -6,7 +6,6 @@ import 'package:movie_mite/core/resources/failures.dart';
 import 'package:movie_mite/features/movie/domain/repositories/enums/movie_collection_enums.dart';
 import 'package:movie_mite/features/movie/domain/repositories/movie_repository.dart';
 import 'package:movie_mite/features/movie/domain/use_cases/get_movies_by_collection.dart';
-import 'package:movie_mite/features/movie/domain/use_cases/get_popular_movies.dart';
 
 part 'browse_movies_event.dart';
 part 'browse_movies_state.dart';
@@ -19,20 +18,9 @@ class BrowseMoviesBloc extends Bloc<BrowseMoviesEvent, BrowseMoviesState> {
   static const int itemsPerPage = 20;
 
   BrowseMoviesBloc(this._movieRepository) : super(BrowseMoviesState.initial()) {
-    on<FetchPopularMovies>(_onGetPopularMovies);
     on<FetchMoviesByCollection>(_onFetchMoviesByCollection);
     on<FetchNextPage>(_onFetchNextPage);
     on<RefreshMovies>(_onRefreshMovies);
-  }
-
-  _onGetPopularMovies(
-    FetchPopularMovies event,
-    Emitter<BrowseMoviesState> emit,
-  ) async {
-    emit(BrowseMoviesState(page: 1, collection: MovieCollection.popular));
-    await GetPopularMovies(
-      _movieRepository,
-    ).call(GetPopularMoviesParams(page: 1));
   }
 
   _onFetchMoviesByCollection(
