@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_mite/core/constants/tmdb_api_urls.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/pages/movie_detail_page.dart';
@@ -106,7 +107,7 @@ class MovieCardImageBuilder extends StatelessWidget {
       return const Icon(Icons.image, color: Colors.grey, size: 48.0);
     }
     return Image.network(
-      'https://image.tmdb.org/t/p/w342${movie.posterPath}',
+      '${TmdbImageUrls.poster}${movie.posterPath}',
       fit: BoxFit.cover,
     );
   }
