@@ -74,7 +74,49 @@ class FavoriteMovies extends StatelessWidget {
         );
         return Future.delayed(Durations.extralong4);
       },
-      child: CustomScrollView(slivers: [MovieListBuilder()]),
+      child: CustomScrollView(
+        slivers: [MovieListBuilder(), EmptyFavoriteMoviesBuilder()],
+      ),
+    );
+  }
+}
+
+class EmptyFavoriteMoviesBuilder extends StatelessWidget {
+  const EmptyFavoriteMoviesBuilder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<BrowseMoviesBloc, BrowseMoviesState>(
+      builder: (context, state) {
+        if (state.status != BrowseMoviesStatus.empty) {
+          return const SliverToBoxAdapter(child: SizedBox.shrink());
+        }
+        return SliverFillRemaining(
+          child: Container(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "No favorite movies?",
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Explore the tabs above",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Text(
+                    "to find your favorites",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  SizedBox(height: 48),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
