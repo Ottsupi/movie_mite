@@ -231,6 +231,23 @@ class BrowseMoviesEndBuilder extends StatelessWidget {
             ),
           );
         }
+        if (state.status == BrowseMoviesStatus.failed) {
+          return SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32.0),
+              child: Center(
+                child: Column(
+                  children: [
+                    Text(
+                      state.failure?.detail ??
+                          "Something went wrong, please try again later.",
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
         return SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 32.0),
