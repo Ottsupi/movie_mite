@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mite/features/movie/domain/entities/movie_entity.dart';
-import 'package:movie_mite/features/movie/presentation/logic/favorite_movies/favorite_movies_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/logic/movie_list/movie_list_bloc.dart';
 import 'package:movie_mite/features/movie/presentation/pages/movie_detail_page.dart';
 
@@ -69,12 +68,7 @@ class MovieCard extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            Center(
-              child: Image.network(
-                'https://image.tmdb.org/t/p/w342${movie.posterPath}',
-                fit: BoxFit.cover,
-              ),
-            ),
+            Center(child: MovieCardImageBuilder(movie: movie)),
             Container(
               height: 100,
               decoration: const BoxDecoration(
@@ -97,6 +91,23 @@ class MovieCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class MovieCardImageBuilder extends StatelessWidget {
+  const MovieCardImageBuilder({super.key, required this.movie});
+
+  final MovieEntity movie;
+
+  @override
+  Widget build(BuildContext context) {
+    if (movie.posterPath.isEmpty) {
+      return const Icon(Icons.image, color: Colors.grey, size: 48.0);
+    }
+    return Image.network(
+      'https://image.tmdb.org/t/p/w342${movie.posterPath}',
+      fit: BoxFit.cover,
     );
   }
 }
