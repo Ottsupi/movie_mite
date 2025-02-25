@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fpdart/src/either.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:movie_mite/core/resources/exceptions.dart';
 import 'package:movie_mite/core/resources/failures.dart';
 import 'package:movie_mite/features/movie/data/datasources/favorite_datasource.dart';
 import 'package:movie_mite/features/movie/data/models/drift_movie_model.dart';
@@ -43,7 +44,7 @@ final class FavoriteRepositoryImpl implements FavoriteRepository {
         _logger.e("Movie is already in favorites");
         return Left(CacheFailure(detail: "Movie is already in favorites"));
       }
-    } on CacheFailure catch (e) {
+    } on CacheException catch (e) {
       return Left(CacheFailure(detail: e.detail));
     }
 
