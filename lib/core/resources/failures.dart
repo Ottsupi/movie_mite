@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:movie_mite/core/resources/exceptions.dart';
 
 abstract class Failure extends Equatable {
   final String detail;
@@ -13,6 +14,16 @@ abstract class Failure extends Equatable {
 // General failures
 class ServerFailure extends Failure {
   ServerFailure({required String detail}) : super(detail: detail);
+
+  // Use DioException if available
+  factory ServerFailure.fromServerException(ServerException exception) {
+    final error = exception.error;
+    if (error != null) {
+      return ServerFailure.fromDioException(error);
+    } else {
+      return ServerFailure(detail: exception.detail);
+    }
+  }
 
   factory ServerFailure.fromDioException(DioException dioException) {
     switch (dioException.type) {
