@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:movie_mite/core/constants/tmdb_api_urls.dart';
 import 'package:movie_mite/features/movie/data/datasources/favorite_datasource.dart';
 import 'package:movie_mite/features/movie/data/repositories/favorite_repository_impl.dart';
@@ -115,16 +116,60 @@ class MovieDetailSummary extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 16),
-        Text(
-          movie.originalTitle,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text(movie.title, style: Theme.of(context).textTheme.titleLarge),
+        OriginalTitleBuilder(movie: movie),
         SizedBox(height: 8),
         Text(movie.overview, style: Theme.of(context).textTheme.bodyMedium),
+        SizedBox(height: 8),
+        ReleaseDateBuilder(movie: movie),
         SizedBox(height: 16),
         MovieRating(movie: movie),
         SizedBox(height: 4),
         FavoriteToggleBuilder(movie: movie),
+      ],
+    );
+  }
+}
+
+class OriginalTitleBuilder extends StatelessWidget {
+  const OriginalTitleBuilder({super.key, required this.movie});
+
+  final MovieEntity movie;
+
+  @override
+  Widget build(BuildContext context) {
+    if (movie.originalTitle == movie.title) {
+      return SizedBox.shrink();
+    }
+    return Column(
+      children: [
+        Text(
+          movie.originalTitle,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+      ],
+    );
+  }
+}
+
+class ReleaseDateBuilder extends StatelessWidget {
+  const ReleaseDateBuilder({super.key, required this.movie});
+
+  final MovieEntity movie;
+
+  @override
+  Widget build(BuildContext context) {
+    if (movie.releaseDate == null) {
+      return SizedBox.shrink();
+    }
+    final dateString = DateFormat('MMMM d, yyyy').format(movie.releaseDate!);
+    return Column(
+      children: [
+        Text(
+          "Release Date: $dateString",
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        SizedBox(height: 8),
       ],
     );
   }
