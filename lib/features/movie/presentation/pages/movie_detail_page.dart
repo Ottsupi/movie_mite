@@ -224,7 +224,11 @@ class FavoriteToggle extends StatelessWidget {
                 context,
               ).add(RemoveFavoriteMovieEvent(movie));
             },
-            icon: Icon(Icons.favorite, size: 36),
+            icon: Icon(
+              Icons.favorite,
+              size: 36,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           SizedBox(width: 8),
           Text(
@@ -242,7 +246,11 @@ class FavoriteToggle extends StatelessWidget {
                 context,
               ).add(AddFavoriteMovieEvent(movie));
             },
-            icon: Icon(Icons.favorite_border, size: 36),
+            icon: Icon(
+              Icons.favorite_border,
+              size: 36,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           SizedBox(width: 8),
           Text(
