@@ -95,11 +95,12 @@ class _SearchResultsState extends State<SearchResults> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () {
+        BlocProvider.of<SearchMoviesBloc>(context).add(RefreshMovies());
         return Future.delayed(Durations.extralong4);
       },
       child: CustomScrollView(
         controller: _scrollController,
-        slivers: [SearchBox(), MovieListBuilder()],
+        slivers: [SearchBox(), MovieListBuilder(), SearchMoviesEndBuilder()],
       ),
     );
   }
@@ -124,6 +125,71 @@ class SearchBox extends StatelessWidget {
               context,
             ).add(FetchMovieByTitle(page: 1, title: value));
           },
+        ),
+      ),
+    );
+  }
+}
+
+class SearchMoviesEndBuilder extends StatelessWidget {
+  const SearchMoviesEndBuilder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 8.0),
+        child: Center(
+          child: BlocBuilder<SearchMoviesBloc, SearchMoviesState>(
+            builder: (context, state) {
+              final maxPages = SearchMoviesBloc.maxPages;
+              if (state.page == maxPages) {
+                final maxResults = maxPages * SearchMoviesBloc.itemsPerPage;
+                return Column(
+                  children: [
+                    Text("Please use another search term"),
+                    Text("Showing top ${maxResults} search results for:"),
+                    Text(
+                      "\"${state.title}\"",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                );
+              }
+              switch (state.status) {
+                case SearchMoviesStatus.initial:
+                  return Text("Type something to begin search");
+                case SearchMoviesStatus.loading:
+                case SearchMoviesStatus.loaded:
+                  return CircularProgressIndicator();
+                case SearchMoviesStatus.empty:
+                  return Column(
+                    children: [
+                      Text("No movies found with title:"),
+                      Text(
+                        "\"${state.title}\"",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ],
+                  );
+                case SearchMoviesStatus.lastPage:
+                  return Column(
+                    children: [
+                      Text("No more movies found with title:"),
+                      Text(
+                        "\"${state.title}\"",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ],
+                  );
+                case SearchMoviesStatus.failed:
+                  return Text(
+                    state.failure?.detail ??
+                        "Something went wrong, please try again later.",
+                  );
+              }
+            },
+          ),
         ),
       ),
     );
