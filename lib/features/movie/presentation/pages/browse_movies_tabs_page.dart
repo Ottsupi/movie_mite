@@ -57,6 +57,7 @@ class BrowseMoviesTabsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      initialIndex: 2,
       length: 2 + includedCollections.length,
       child: Scaffold(
         appBar: AppBar(
