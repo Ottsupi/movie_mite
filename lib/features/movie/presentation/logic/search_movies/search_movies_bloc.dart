@@ -13,7 +13,7 @@ class SearchMoviesBloc extends Bloc<SearchMoviesEvent, SearchMoviesState> {
   final MovieRepository _movieRepository;
   final _logger = GetIt.I.get<Logger>();
 
-  static const int maxPages = 2;
+  static const int maxPages = 10;
   static const int itemsPerPage = 20;
 
   SearchMoviesBloc(this._movieRepository) : super(SearchMoviesState.initial()) {
