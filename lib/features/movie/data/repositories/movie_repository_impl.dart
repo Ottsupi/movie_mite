@@ -97,7 +97,7 @@ final class MovieRepositoryImpl implements MovieRepository {
       _movieListStreamController.add(entities);
       _movieListStatusController.add(MovieListStatus.networkLoaded);
       return Right(entities);
-    } on ServerFailure catch (e) {
+    } on ServerException catch (e) {
       return Left(ServerFailure(detail: e.detail));
     }
   }
