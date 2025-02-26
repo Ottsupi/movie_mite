@@ -8,8 +8,9 @@ A Movie browsing application in Flutter.
 ## How to run
 
 1. Clone the repository
-2. `flutter pub get`
-3. `flutter run`
+2. Start an Android Emulator
+3. `flutter pub get`
+4. `flutter run`
 
 The packages using code generation are `json_serializable` and `drift`.
 All generated code are tracked by git. To generate,
